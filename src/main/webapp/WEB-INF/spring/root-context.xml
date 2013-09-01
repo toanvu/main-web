@@ -4,5 +4,24 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- Definition of EJBs -->
+	<bean id="loginBean"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:global/commonejb/LoginBean" />
+	</bean>
+
+	<bean id="userManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="java:global/commonejb/UserManager" />
+	</bean>
+
+	<bean id="contactManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="java:global/commonejb/ContactManager" />
+	</bean>
+	<!-- End definition of EJBs -->
 		
 </beans>

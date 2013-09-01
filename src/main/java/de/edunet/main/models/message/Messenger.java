@@ -1,4 +1,4 @@
-package de.edunet.main.models;
+package de.edunet.main.models.message;
 
 import java.util.List;
 

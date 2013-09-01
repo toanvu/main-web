@@ -1,4 +1,4 @@
-package de.edunet.main.controllers;
+package de.edunet.main.controllers.main;
 
 import java.util.Locale;
 
@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import de.edunet.main.models.Messenger;
+import de.edunet.main.models.message.Messenger;
+import de.edunet24.dev.utils.handlers.UserHandler;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
+    
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class); 
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);	
-	
+	private UserHandler userHanler;
+    
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -29,51 +32,50 @@ public class HomeController {
 	public String home(
 			Locale locale, Model model, HttpSession session) {
 		logger.info("Welcome home! The client locale is {}.", locale);		
+
+		 userHanler=  new UserHandler(session);
+		logger.info("Deine id : " + userHanler.getILogin().getUser().getId());
 		return "home";
 	}
-	
-	
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/chat/show", method = RequestMethod.GET)
-	public String viewGroup(
-			@RequestParam(value = "groupId") int groupId,
-			@RequestParam(value = "userId") int userId,
-			Locale locale, Model model, HttpSession session) {
+	public String viewGroup(@RequestParam(value = "groupId") int groupId,
+			@RequestParam(value = "userId") int userId, Locale locale,
+			Model model, HttpSession session) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		logger.info("groupid  = "+ groupId);
-		logger.info("userid  = "+ userId);
-		
+
+		logger.info("groupid  = " + groupId);
+		logger.info("userid  = " + userId);
+
 		Messenger messenger = new Messenger(session);
-		if(groupId==0){
+		if (groupId == 0) {
 			int newGroupId = messenger.createNewGroup(userId);
 			model.addAttribute("chatContent", messenger.update(newGroupId));
-			model.addAttribute("groupId", newGroupId);			
-		}else{
+			model.addAttribute("groupId", newGroupId);
+		} else {
 			model.addAttribute("chatContent", messenger.update(groupId));
-			model.addAttribute("groupId", groupId);			
+			model.addAttribute("groupId", groupId);
 		}
 		model.addAttribute("userId", messenger.getUserId());
-		
-		
+
 		return "chat";
 	}
-	
+
 	@RequestMapping(value = "/chat/send", method = RequestMethod.POST)
-	public String postMessage(
-			@RequestParam(value = "groupId") int groupId,
-			@RequestParam(value = "newMessage") String message,			
-			Locale locale, Model model, HttpSession session) {
+	public String postMessage(@RequestParam(value = "groupId") int groupId,
+			@RequestParam(value = "newMessage") String message, Locale locale,
+			Model model, HttpSession session) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
+
 		Messenger messenger = new Messenger(session);
-		messenger.send(groupId, message);		
+		messenger.send(groupId, message);
 		model.addAttribute("chatContent", messenger.update(groupId));
 		model.addAttribute("groupId", groupId);
 		model.addAttribute("userId", messenger.getUserId());
 		return "chat";
 	}
-	
+
 }
