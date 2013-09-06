@@ -17,6 +17,9 @@
         <link rel="stylesheet" href="/main-web/resources/css/bootstrap.css">
         <link rel="stylesheet" href="/main-web/resources/css/screen.css">
         <script src="/main-web/resources/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="/main-web/resources/js/jQuery.atmosphere.js"></script>
+        <script src="/main-web/resources/js/application.js"></script>        
     </head>
     <body>
 
@@ -142,7 +145,7 @@
 						<div class="list-group">
 						  <c:forEach items="${teacherGroup}" var="group">
 						 	<a href="/main-web/chat/show?groupId=${group.getId()}&userId=${currentUser.getId()}" class="list-group-item new-message-received">
-							  <img src="resources//main-web/resources/img/account-icons/mail.png">							  	 
+							  <img src="/main-web/resources/img/account-icons/mail.png">							  	 
 							  	 <c:if test="${group.getMessengers().get(0).getId() == currentUser.getId()}">
 							  	 		${group.getMessengers().get(1).getUsername()}
 							  	 </c:if>
