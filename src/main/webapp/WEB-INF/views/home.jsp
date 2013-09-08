@@ -17,9 +17,25 @@
 
         <link rel="stylesheet" href="resources/css/bootstrap.css">
         <link rel="stylesheet" href="resources/css/screen.css">
-        <script src="resources/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="/main-web/resources/js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
+    
+    <!--  websocket test -->
+   
+    <input type="button" value="POST to server..." onclick="post()"/>
+
+	<div class="controlPanel">
+		<div id="cp-1"  class="cpitem"><img src="/main-web/resources/img/logo.png"/></div>
+	</div> 
+            
+        <script src="/main-web/resources/js/jquery-1.6.4.min.js" type="text/javascript"></script>
+<!--         <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script> -->
+<!--         <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script> -->
+        <script src="/main-web/resources/js/edunet-ws.js" type="text/javascript"></script>   
+   
+	
+	<!--  websocket test -->	
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" id="head-bar">
 	  <a class="navbar-brand" href="#"><img src="resources/img/logo.png"></a>
@@ -363,8 +379,8 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
 
 
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+	<script>window.jQuery || document.write('<script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+	
 	<script src="resources/js/vendor/bootstrap.min.js"></script>
 	<script src="resources/js/neu-2013.min.js"></script>
 </body>

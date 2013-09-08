@@ -7,7 +7,8 @@ public  class Data {
     private String message;
     private String author;
     private long time;
-
+    private int groupId;
+    
     public Data() {
         this("","");
     }
@@ -41,4 +42,14 @@ public  class Data {
     public void setTime(long time) {
         this.time = time;
     }
+
+	public int getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+    
+    
 } 

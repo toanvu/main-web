@@ -18,8 +18,9 @@
         <link rel="stylesheet" href="/main-web/resources/css/screen.css">
         <script src="/main-web/resources/js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="/main-web/resources/js/jquery.url.js"></script>
         <script src="/main-web/resources/js/jQuery.atmosphere.js"></script>
-        <script src="/main-web/resources/js/application.js"></script>        
+        <script src="/main-web/resources/js/edunet-ws.js"></script>        
     </head>
     <body>
 

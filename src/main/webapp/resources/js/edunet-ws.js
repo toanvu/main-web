@@ -1,3 +1,4 @@
+jQuery.noConflict();
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1543,3 +1544,308 @@ jQuery.atmosphere = function() {
     };
 
 }(jQuery));
+
+
+
+/////////////////////URL function
+
+/* ===========================================================================
+ * Download by http://www.codefans.net
+ * JQuery URL Parser
+ * Version 1.0
+ * Parses URLs and provides easy access to information within them.
+ *
+ * Author: Mark Perkins
+ * Author email: mark@allmarkedup.com
+ *
+ * For full documentation and more go to http://projects.allmarkedup.com/jquery_url_parser/
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * CREDITS:
+ *
+ * Parser based on the Regex-based URI parser by Steven Levithan.
+ * For more information (including a detailed explaination of the differences
+ * between the 'loose' and 'strict' pasing modes) visit http://blog.stevenlevithan.com/archives/parseuri
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * LICENCE:
+ *
+ * Released under a MIT Licence. See licence.txt that should have been supplied with this file,
+ * or visit http://projects.allmarkedup.com/jquery_url_parser/licence.txt
+ *
+ * ---------------------------------------------------------------------------
+ * 
+ * EXAMPLES OF USE:
+ *
+ * Get the domain name (host) from the current page URL
+ * jQuery.url.attr("host")
+ *
+ * Get the query string value for 'item' for the current page
+ * jQuery.url.param("item") // null if it doesn't exist
+ *
+ * Get the second segment of the URI of the current page
+ * jQuery.url.segment(2) // null if it doesn't exist
+ *
+ * Get the protocol of a manually passed in URL
+ * jQuery.url.setUrl("http://allmarkedup.com/").attr("protocol") // returns 'http'
+ *
+ */
+
+jQuery.url = function()
+{
+	var segments = {};
+	
+	var parsed = {};
+	
+	/**
+    * Options object. Only the URI and strictMode values can be changed via the setters below.
+    */
+  	var options = {
+	
+		url : window.location, // default URI is the page in which the script is running
+		
+		strictMode: false, // 'loose' parsing by default
+	
+		key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"], // keys available to query 
+		
+		q: {
+			name: "queryKey",
+			parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+		},
+		
+		parser: {
+			strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,  //less intuitive, more accurate to the specs
+			loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ // more intuitive, fails on relative paths and deviates from specs
+		}
+		
+	};
+	
+    /**
+     * Deals with the parsing of the URI according to the regex above.
+ 	 * Written by Steven Levithan - see credits at top.
+     */		
+	var parseUri = function()
+	{
+		str = decodeURI( options.url );
+		
+		var m = options.parser[ options.strictMode ? "strict" : "loose" ].exec( str );
+		var uri = {};
+		var i = 14;
+
+		while ( i-- ) {
+			uri[ options.key[i] ] = m[i] || "";
+		}
+
+		uri[ options.q.name ] = {};
+		uri[ options.key[12] ].replace( options.q.parser, function ( $0, $1, $2 ) {
+			if ($1) {
+				uri[options.q.name][$1] = $2;
+			}
+		});
+
+		return uri;
+	};
+
+    /**
+     * Returns the value of the passed in key from the parsed URI.
+  	 * 
+	 * @param string key The key whose value is required
+     */		
+	var key = function( key )
+	{
+		if ( ! parsed.length )
+		{
+			setUp(); // if the URI has not been parsed yet then do this first...	
+		} 
+		if ( key == "base" )
+		{
+			if ( parsed.port !== null && parsed.port !== "" )
+			{
+				return parsed.protocol+"://"+parsed.host+":"+parsed.port+"/";	
+			}
+			else
+			{
+				return parsed.protocol+"://"+parsed.host+"/";
+			}
+		}
+	
+		return ( parsed[key] === "" ) ? null : parsed[key];
+	};
+	
+	/**
+     * Returns the value of the required query string parameter.
+  	 * 
+	 * @param string item The parameter whose value is required
+     */		
+	var param = function( item )
+	{
+		if ( ! parsed.length )
+		{
+			setUp(); // if the URI has not been parsed yet then do this first...	
+		}
+		return ( parsed.queryKey[item] === null ) ? null : parsed.queryKey[item];
+	};
+
+    /**
+     * 'Constructor' (not really!) function.
+     *  Called whenever the URI changes to kick off re-parsing of the URI and splitting it up into segments. 
+     */	
+	var setUp = function()
+	{
+		parsed = parseUri();
+		
+		getSegments();	
+	};
+	
+    /**
+     * Splits up the body of the URI into segments (i.e. sections delimited by '/')
+     */
+	var getSegments = function()
+	{
+		var p = parsed.path;
+		segments = []; // clear out segments array
+		segments = parsed.path.length == 1 ? {} : ( p.charAt( p.length - 1 ) == "/" ? p.substring( 1, p.length - 1 ) : path = p.substring( 1 ) ).split("/");
+	};
+	
+	return {
+		
+	    /**
+	     * Sets the parsing mode - either strict or loose. Set to loose by default.
+	     *
+	     * @param string mode The mode to set the parser to. Anything apart from a value of 'strict' will set it to loose!
+	     */
+		setMode : function( mode )
+		{
+			strictMode = mode == "strict" ? true : false;
+			return this;
+		},
+		
+		/**
+	     * Sets URI to parse if you don't want to to parse the current page's URI.
+		 * Calling the function with no value for newUri resets it to the current page's URI.
+	     *
+	     * @param string newUri The URI to parse.
+	     */		
+		setUrl : function( newUri )
+		{
+			options.url = newUri === undefined ? window.location : newUri;
+			setUp();
+			return this;
+		},		
+		
+		/**
+	     * Returns the value of the specified URI segment. Segments are numbered from 1 to the number of segments.
+		 * For example the URI http://test.com/about/company/ segment(1) would return 'about'.
+		 *
+		 * If no integer is passed into the function it returns the number of segments in the URI.
+	     *
+	     * @param int pos The position of the segment to return. Can be empty.
+	     */	
+		segment : function( pos )
+		{
+			if ( ! parsed.length )
+			{
+				setUp(); // if the URI has not been parsed yet then do this first...	
+			} 
+			if ( pos === undefined )
+			{
+				return segments.length;
+			}
+			return ( segments[pos] === "" || segments[pos] === undefined ) ? null : segments[pos];
+		},
+		
+		attr : key, // provides public access to private 'key' function - see above
+		
+		param : param // provides public access to private 'param' function - see above
+		
+	};
+	
+}();
+
+/////////////////////EDUNET24.de
+
+function controlConnect() {
+	controlUnsubscribe();
+    controlSubscribe();
+}
+
+// jquery.atmosphere.response
+function callback(response) {
+	// Websocket events.
+	jQuery.atmosphere.log('info', ["response.state: " + response.state]);
+	jQuery.atmosphere.log('info', ["response.transport: " + response.transport]);
+	jQuery.atmosphere.log('info', ["response.status: " + response.status]);
+
+	if (response.transport != 'polling' && response.state == 'messageReceived') {
+		jQuery.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
+		if (response.status == 200) {
+			var data = response.responseBody;
+			if (data.length > 0) {
+				alert(data);
+			}
+		}
+	}
+}
+
+function controlSubscribe() {
+	if (!this.callbackAdded) {		
+//		var url = jQuery.url.setUp();
+		//main-web is container,
+		//pubsub ist servlet mapped by web.xml
+		//control will be looked up by broadcaster to publish the mesasges		
+		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/atmo-web/pubsub/control';		
+		this.connectedEndpoint = jQuery.atmosphere.subscribe(location,
+			!callbackAdded ? this.callback : null,
+					jQuery.atmosphere.request = { 
+				transport: 'websocket' 
+			}
+		);
+		
+		this.callbackAdded = true;
+	}	
+}
+
+function controlUnsubscribe(){
+	this.callbackAdded = false;
+	jQuery.atmosphere.unsubscribe();
+}
+
+function ControlManager() {
+	this.suscribe = controlSubscribe;
+	this.unsubscribe = controlUnsubscribe;
+	this.connect = controlConnect;
+	this.callback = callback;
+	this.connect();
+	this.actions = cm_actions;
+}
+
+function showItem(id) {
+	jQuery(id).show();
+}
+
+function hideItem(id) {
+	jQuery(id).hide();
+}
+
+function post() {
+	
+	var request = jQuery.ajax({
+//		url: '/main-web/services/message/receiver',		
+		url: '/atmo-web/rest/control/toggle' ,
+		type: 'POST',
+		data:  {authorId : 2 ,groupId :5, message : "test message"},
+		contentType:"application/json; charset=utf-8",
+	});
+				
+	request.fail(function(jqXHR, textStatus) {
+  		alert( "Request failed: " + textStatus );
+	});
+}
+
+
+jQuery(document).ready(function($){
+	$('#cp-1').hide();	
+	cm = new ControlManager();
+ });
