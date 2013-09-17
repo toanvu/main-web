@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.atmosphere.config.service.AtmosphereHandlerService;
 import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereRequest;
@@ -13,13 +14,71 @@ import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResponse;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.cpr.DefaultBroadcaster;
 import org.atmosphere.cpr.HeaderConfig;
+import org.atmosphere.cpr.MetaBroadcaster;
 import org.atmosphere.handler.AbstractReflectorAtmosphereHandler;
+import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.websocket.WebSocketEventListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.edunet.main.models.Data;
+
+@AtmosphereHandlerService(path="/chat")
+//public class WebSocketHandler implements AtmosphereHandler {
+//	private static final Logger LOG = LoggerFactory.getLogger(WebSocketHandler.class);
+//	 @Override
+//	    public void onRequest(AtmosphereResource r) 
+//	           throws IOException {
+//
+//	        AtmosphereRequest request = r.getRequest();
+//	        AtmosphereResponse response = r.getResponse();
+//	        LOG.debug("long polling connection : "+ request.getPathInfo());
+//	        // First, tell Atmosphere
+//	        // to allow bi-directional communication by suspending.
+//	        if (request.getMethod().equalsIgnoreCase("GET")) {
+//	        	LOG.debug("new client get connection : "+ request.getPathInfo());
+//	                r.suspend();
+//	               
+//	        // Second, broadcast message to all connected users.
+//	        } else if (request.getMethod().equalsIgnoreCase("POST")) {
+//	        	System.out.println("POST connection : "+ request);	        	
+//	        	Broadcaster b = BroadcasterFactory.getDefault().lookup("/chat",true);
+//	        	b.broadcast("hello");
+//	           //MetaBroadcaster.getDefault().broadcastTo("/chat","broadcast");
+//	        }
+//	    }
+//	 
+//	 @Override
+//	    public void onStateChange(AtmosphereResourceEvent event){
+//	        AtmosphereResource resource = event.getResource();
+//	        AtmosphereResponse response = resource.getResponse();
+//
+//	        if (event.isSuspended()) {
+//	            switch (resource.transport()) {
+//	                case JSONP:
+//	                case AJAX:
+//	                case LONG_POLLING:
+//	                    event.getResource().resume();
+//	                    break;
+//	                default:
+//					try {
+//						response.getWriter().flush();
+//					} catch (IOException e) {
+//						LOG.error("something wrong with getwriter"+e.getMessage());
+//					}
+//	                    break;
+//	            }
+//	        } 
+//	    }
+//
+//	@Override
+//	public void destroy() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//}
 
 
 public class WebSocketHandler extends AbstractReflectorAtmosphereHandler{
@@ -28,26 +87,26 @@ public class WebSocketHandler extends AbstractReflectorAtmosphereHandler{
 	@Override
 	public void onRequest(AtmosphereResource event) throws IOException {
 	
-	  HttpServletRequest req = event.getRequest();
-	  HttpServletResponse res = event.getResponse();
-	  String method = req.getMethod();
-	
+	  HttpServletRequest request = event.getRequest();
+	  HttpServletResponse response = event.getResponse();
+	  String method = request.getMethod();
+	  
 	  // Suspend the response.
 	  if ("GET".equalsIgnoreCase(method)) {
 		  
 		  // Log all events on the console, including WebSocket events.
           event.addEventListener(new WebSocketEventListenerAdapter());
           
-	      res.setContentType("text/html;charset=ISO-8859-1");
+	      response.setContentType("text/html;charset=ISO-8859-1");
 	      
-	      Broadcaster b = lookupBroadcaster(req.getPathInfo());	      
-	      event.setBroadcaster(b);	      
-	      String atmoTransport = req.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
+	      Broadcaster broadcast =  BroadcasterFactory.getDefault().lookup("/chat/1", true);     
+	      event.setBroadcaster(broadcast);	      
+	      String atmoTransport = request.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
 	      
 	      if (atmoTransport != null && !atmoTransport.isEmpty() && 
 	    		  atmoTransport.equalsIgnoreCase(HeaderConfig.LONG_POLLING_TRANSPORT)) {
 	    	  
-	          req.setAttribute(ApplicationConfig.RESUME_ON_BROADCAST, Boolean.TRUE);
+	          request.setAttribute(ApplicationConfig.RESUME_ON_BROADCAST, Boolean.TRUE);
 	          event.suspend(-1, false);
 	          
 	      } else {
@@ -55,9 +114,8 @@ public class WebSocketHandler extends AbstractReflectorAtmosphereHandler{
 	      }
 	  } else if ("POST".equalsIgnoreCase(method)) {		
 		  
-	      Broadcaster b = lookupBroadcaster(req.getPathInfo());
-	
-	      String message = req.getReader().readLine();
+	      Broadcaster b = BroadcasterFactory.getDefault().lookup("/chat/1", true);	      
+	      String message = request.getReader().readLine();
 	
 	      if (message != null && message.indexOf("message") != -1) {
 	          b.broadcast(message.substring("message=".length()));
