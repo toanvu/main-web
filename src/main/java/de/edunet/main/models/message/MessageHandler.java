@@ -9,11 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.edunet24.common.GroupsByRole;
-import de.edunet24.contact.entityInterfaces.IContactManager;
-import de.edunet24.dev.utils.handlers.UserHandler;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
-import de.edunet24.message.entityImp.MessageBean;
 import de.edunet24.message.entityInterfaces.IMessage;
 import de.edunet24.usermanager.entityBeans.User;
 import de.edunet24.usermanager.entityInterfaces.ILogin;

@@ -17,17 +17,17 @@
 			value="java:global/commonejb/UserManager" />
 	</bean>
 	
+	<bean id="contactManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="java:global/commonejb/ContactManager" />
+	</bean>
+	
 	<bean id="messageBean"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName"
 			value="java:global/commonejb/MessageBean" />
 	</bean>
-
-<!-- 	<bean id="contactManager" -->
-<!-- 		class="org.springframework.jndi.JndiObjectFactoryBean"> -->
-<!-- 		<property name="jndiName" -->
-<!-- 			value="java:global/commonejb/ContactManager" /> -->
-<!-- 	</bean> -->
 	<!-- End definition of EJBs -->
 		
 </beans>

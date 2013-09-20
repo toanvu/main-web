@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page session="false" %>
 
 <!DOCTYPE html>
@@ -39,7 +40,19 @@
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" id="head-bar">
 	  <a class="navbar-brand" href="#"><img src="resources/img/logo.png"></a>
-	  <a href="#" class="btn btn-danger pull-right">Abmelden (${currentUser.getUsername()})</a>
+	  <form:form action="/main-web/logout" method="POST">
+	  	 <button type="submit" class="btn btn-danger pull-right">Abmelden (${currentUser.getUsername()})</button>
+	  </form:form>
+	  <ul class="languages pull-right">
+    	<li>Sprache:</li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Deutsch"><img src="resources/img/flag_de.png" alt="Flagge Deutschland"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Englisch"><img src="resources/img/flag_gb.png" alt="Flagge England"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Französisch"><img src="resources/img/flag_hr.png" alt="Flagge Frankreich"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Italienisch"><img src="resources/img/flag_ie.png" alt="Flagge Ireland"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Spanisch"><img src="resources/img/flag_es.png" alt="Flagge Spanien"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Türkisch"><img src="resources/img/flag_tr.png" alt="Flagge Türkei"></a></li>
+		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Vietnamesisch"><img src="resources/img/flag_vn.png" alt="Flagge Vietnam"></a></li>
+     </ul>
   	</nav>
 
   	<div class="wrapper">
@@ -54,11 +67,11 @@
 		  				<a href="neue-gruppennachricht.html"><img src="resources/img/account-icons/edit.png"> Gruppennachricht schreiben</a>
 		  			</li>
 					<li class="active">
-						<a href="index.html"><img src="resources/img/account-icons/home16.png"> Startseite</a>
+						<a href=""><img src="resources/img/account-icons/home16.png"> Startseite</a>
 					</li>
 				    <li><a href="#"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
-				    <li><a href="#"><img src="resources/img/account-icons/address-book.png"> Kontakte</a></li>
-				    <li><a href="#"><img src="resources/img/account-icons/user-plus.png"> Kontakt hinzufügen</a></li>
+				    <li><a href="contactlist"><img src="resources/img/account-icons/address-book.png"> Kontakte</a></li>
+				    <li><a href="contact"><img src="resources/img/account-icons/user-plus.png"> Kontakt hinzufügen</a></li>
 				    <li><a href="#"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
 				    <li><a href="#"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
 	  			</ul>
@@ -137,7 +150,9 @@
 	  		</div>
 
 	  		<div class="introduction-video-button text-center">
-				<a href="#" class="btn btn-warning btn-large btn-block" id="anleitungsvideo-button">Anleitungsvideo</a>
+				<a href="#" class="btn btn-success btn-large btn-block" id="anleitungsvideo-button">
+					<i class="icon-facetime-video"></i>  Anleitungsvideo
+				</a>
 			</div>
 
 	  	</section>
@@ -272,7 +287,7 @@
 
 	  	</section>
 
-	  	<section class="main-content">
+	  	<section class="main-content calc-width">
 	  		<header class="section-header">
 	  			<h3>Willkommen</h3>
 	  		</header>
@@ -281,21 +296,45 @@
 	  			<div class="row dashboard">
 	  				<div class="col-lg-6">
 		  				<ul class="nav nav-pills nav-stacked">
-		  					<li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Sie haben <span class="badge">3</span> neue Nachrichten</a></li>
-		  					<li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/user-plus.png"> Sie haben <span class="badge">1</span>  neue Kontaktanfrage</a></li>
-		  					<li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/calendar16.png"> Sie haben <span class="badge">0</span>  neue Termine</a></li>
+		  					<li class="dropdown">
+		  						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		  							<img src="resources/img/account-icons/mail.png"> Sie haben <span class="badge">3</span> neue Nachrichten
+		  						</a>
+		  						<ul class="dropdown-menu pull-right">
+							      <li><a href="neue-nachrichten.html">Ali Mustermann</a></li>
+							      <li><a href="neue-nachrichten.html">Max Mustermann</a></li>
+							      <li><a href="neue-nachrichten.html">Franz Mustermann</a></li>
+							    </ul>
+		  					</li>
+		  					<li class="dropdown">
+		  						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		  							<img src="resources/img/account-icons/user-plus.png"> Sie haben <span class="badge">1</span>  neue Kontaktanfrage
+		  						</a>
+		  						<ul class="dropdown-menu pull-right">
+							      <li><a href="neue-nachrichten.html">Martin Mustermann</a></li>
+							    </ul>
+		  					</li>
+		  					<li class="dropdown">
+		  						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		  							<img src="resources/img/account-icons/calendar16.png"> Sie haben <span class="badge">0</span>  neue Termine
+		  						</a>
+		  						<ul class="dropdown-menu pull-right">
+							      <li><a href="#">Kein neuer Termin</a></li>
+							    </ul>
+		  					</li>
 		  				</ul>
 	  				</div>
 	  				<div class="col-lg-6">
 		  				<ul class="nav nav-pills nav-stacked">
-		  					<li><a href="#"><img src="resources/img/account-icons/paper-plane.png"> Nachricht an alle Lehrer</a></li>
+		  					<li><a href="neue-nachricht.html"><img src="resources/img/account-icons/paper-plane.png"> Neue Nachricht schreiben</a></li>
+							<li><a href="#"><img src="resources/img/account-icons/paper-plane.png"> Nachricht an alle Lehrer</a></li>
 		  					<li><a href="#"><img src="resources/img/account-icons/paper-plane.png"> Nachricht an alle Eltern</a></li>
 		  				</ul>
 	  				</div>
 	  			</div>
 		  	</div>
 
-		  	<footer class="meta-footer">
+		  	<footer class="meta-footer calc-width">
 		  		<span>&copy 2013 Edunet24.de</span>
 		  		<ul class="pull-right">
 			  		<li><a data-toggle="modal" href="#Nutzungsbedingungen">Nutzungsbedingungen </a></li>
@@ -309,11 +348,129 @@
 
 
 
+	<section class="instruction-videos hide" id="Instructions">
+		<button type="button" class="close introduction-video-button tooltip-toggle" aria-hidden="true"  data-toggle="tooltip" title="Schließen" data-placement="left">&times;</button>
+		<div class="row">
+			<div class="col-lg-5 col-xs-5">
+				<div id="carousel-instruction" class="carousel slide">
+				  <div class="carousel-inner">
+				    <div class="item active">
+						<div class="row">
+						 		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+						  		</div>
+				    	</div>
+				    	<div class="row">
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+								</div>
+				    	</div>
+				    </div>
+				    <div class="item">
+						<div class="row">
+						 		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+						  		</div>
+				    	</div>
+				    	<div class="row">
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+								</div>
+				    	</div>
+				    </div>
+				    <div class="item">
+						<div class="row">
+						 		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+									<div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+						  		</div>
+				    	</div>
+				    	<div class="row">
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+					    		</div>
+					    		<div class="col-lg-6 col-xs-6">
+								    <div class="thumbnail">
+										<img src="http://placehold.it/250x140" alt="">
+										<h5>Nachricht schreiben</h5>
+									</div>
+								</div>
+				    	</div>
+				    </div>
+				  </div>
+				  <a class="left carousel-control" href="#carousel-instruction" data-slide="prev">
+				    <span class="icon-prev tooltip-toggle" data-toggle="tooltip" title="Zurück" data-placement="top"></span>
+				  </a>
+				  <a class="right carousel-control" href="#carousel-instruction" data-slide="next">
+				    <span class="icon-next tooltip-toggle" data-toggle="tooltip" title="Weiter" data-placement="top"></span>
+				  </a>
+				</div>
+			</div>
+
+
+			<div class="col-lg-6 col-xs-6 col-lg-offset-1 col-xs-offset-1 main-video">
+				<div class="thumbnail">
+						<img src="http://placehold.it/700x325" alt="">
+						<h5>Nachricht schreiben</h5>
+						<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. </p>
+					</div>
+			</div>
+		</div>
+	</section>
+
 
   <div class="modal fade" id="Nutzungsbedingungen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+        	<button type="button" class="close  tooltip-toggle" aria-hidden="true"  data-toggle="tooltip" title="Schließen" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">Nutzungsbedingungen</h4>
         </div>
         <div class="modal-body">
@@ -336,6 +493,7 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+        	<button type="button" class="close  tooltip-toggle" aria-hidden="true"  data-toggle="tooltip" title="Schließen" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">Datenschutz</h4>
         </div>
         <div class="modal-body">
@@ -359,6 +517,7 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+          <button type="button" class="close tooltip-toggle" aria-hidden="true"  data-toggle="tooltip" title="Schließen" data-dismiss="modal" data-placement="left" aria-hidden="true">&times;</button>
           <h4 class="modal-title">Impressum</h4>
         </div>
         <div class="modal-body">
@@ -378,9 +537,8 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
   </div><!-- /.modal -->
 
 
-
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-	
 	<script src="resources/js/vendor/bootstrap.min.js"></script>
 	<script src="resources/js/neu-2013.min.js"></script>
 </body>

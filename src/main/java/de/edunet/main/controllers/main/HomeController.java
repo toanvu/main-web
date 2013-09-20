@@ -42,7 +42,12 @@ public class HomeController {
 		this.messageHandler = messageHandler;
 	}
 
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public String logout(){
 
+		messageHandler.getLoginBean().logout();
+		return "redirect:../home-web/";
+	}
 
 //	/**
 //	 * Simply selects the home view to render by returning its name.

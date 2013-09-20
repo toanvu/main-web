@@ -3,17 +3,15 @@ package de.edunet.main.models.contact;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.edunet24.contact.entityBeans.CRequest;
 import de.edunet24.contact.entityBeans.Contact;
 import de.edunet24.contact.entityInterfaces.IContactManager;
+import de.edunet24.usermanager.entityBeans.User;
 import de.edunet24.usermanager.entityInterfaces.ILogin;
 import de.edunet24.usermanager.entityInterfaces.IUserManager;
-import de.edunet24.usermanager.entityBeans.User;
 
 public class ContactHandler {
 	
@@ -64,12 +62,6 @@ public class ContactHandler {
 		this.allUsers = allUsers;
 	}
 	
-	
-	public List<User> showAllUsers(){
-
-		return allUsers;
-	}
-	
 	public List<User> searchUsers(String firstname, String lastname){
 		logger.info("start search user");
 		
@@ -109,8 +101,16 @@ public class ContactHandler {
 		return null;
 	}
 	
-	public List<CRequest> getAllCRequests() {
-		return contactManager.getRequestByUserResponse(loginBean.getUser());		
+	public List<CRequest> getRequestByUserResponse(){
+		return contactManager.getRequestByUserResponse(loginBean.getUser());
+	}
+	
+	public List<CRequest> getRequestByUserRequest(){
+		return contactManager.getRequestByUserRequest(loginBean.getUser());
+	}
+	
+	public List<Contact> getAllContact(){
+		return contactManager.getContacts(loginBean.getUser());
 	}
 	
 	public void replyCRequest(int userRequestId, String action){
@@ -126,7 +126,9 @@ public class ContactHandler {
 			contact.setCreatedDate(new Date());
 			contactManager.addContact(contact);
 		}
-
+		
+		contactManager.deleteCRequest(contactManager.getCRequest(userRequest, currentUser));
+		
 	}
 	
 	
