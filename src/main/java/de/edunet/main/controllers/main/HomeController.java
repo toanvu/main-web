@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import de.edunet.main.models.contact.ContactHandler;
 import de.edunet.main.models.message.MessageHandler;
 
 /**
@@ -22,7 +23,16 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class); 
 	
 	private MessageHandler messageHandler;
+	private ContactHandler contactHandler;
+	
+	public void setMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
+	}
     
+	public void setContactHandler(ContactHandler contactHandler) {
+		this.contactHandler = contactHandler;
+	}
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -35,14 +45,16 @@ public class HomeController {
 			return "redirect:../home-web/";
 		}
 		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+		
+		model.addAttribute("allCRequestsUserResponse",
+				contactHandler.getRequestByUserResponse());
+		
 		return "home";
 	}
 
-	public void setMessageHandler(MessageHandler messageHandler) {
-		this.messageHandler = messageHandler;
-	}
+	
 
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(){
 
 		messageHandler.getLoginBean().logout();

@@ -26,6 +26,7 @@
 	<beans:bean id="homeController" 
 			class="de.edunet.main.controllers.main.HomeController">
 		<beans:property name="messageHandler" ref="messageService" />
+		<beans:property name="contactHandler" ref="contactService" />
 	</beans:bean>
 
 	<beans:bean id="messageService"
@@ -42,7 +43,7 @@
 	</beans:bean>
 
 	<beans:bean id="contactService"
-		class="de.edunet.main.models.contact.ContactHandler" init-method="init">
+		class="de.edunet.main.models.contact.ContactHandler">
 		<beans:property name="loginBean" ref="loginBean" />
 		<beans:property name="userManager" ref="userManager" />
 		<beans:property name="contactManager" ref="contactManager" />

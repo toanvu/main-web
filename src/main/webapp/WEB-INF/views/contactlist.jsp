@@ -26,10 +26,8 @@
 	<nav class="navbar navbar-default navbar-static-top" role="navigation"
 		id="head-bar">
 		<a class="navbar-brand" href="#"><img src="resources/img/logo.png"></a>
-		<form:form action="/main-web/logout" method="POST">
-			<button type="submit" class="btn btn-danger pull-right">Abmelden
-				(${currentUser.getUsername()})</button>
-		</form:form>
+		<a href=/main-web/logout class="btn btn-danger pull-right">Abmelden
+			(${currentUser.getUsername()})</a>
 		<ul class="languages pull-right">
 			<li>Sprache:</li>
 			<li><a href="#" class="tooltip-toggle" data-toggle="tooltip"
@@ -67,14 +65,14 @@
 					<li class="nav-button"><a href="neue-gruppennachricht.html"><img
 							src="resources/img/account-icons/edit.png">
 							Gruppennachricht schreiben</a></li>
-					<li><a href="index.html"><img
+					<li><a href="./"><img
 							src="resources/img/account-icons/home16.png"> Startseite</a></li>
 					<li><a href="neue-nachrichten.html"><img
 							src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
 					<li class="active"><a href=""><img
 							src="resources/img/account-icons/address-book.png">
 							Kontakte</a></li>
-					<li><a href="../contact"><img
+					<li><a href="contact"><img
 							src="resources/img/account-icons/user-plus.png"> Kontakte
 							hinzufügen</a></li>
 					<li><a href="kalender.html"><img
@@ -336,7 +334,7 @@
 			<ul class="nav nav-tabs contact-tabs" id="contact-tab">
 				<li class="active"><a href="#Anfragen"> <img
 						src="resources/img/account-icons/user-plus.png">
-						Kontaktanfragen <span class="badge">${allCRequests.size()}</span>
+						Kontaktanfragen <span class="badge">${allCRequestsUserResponse.size()}</span>
 				</a></li>
 				<li><a href="#Lehrer"><img
 						src="resources/img/account-icons/address-book.png"> Lehrer</a></li>
@@ -351,8 +349,8 @@
 
 					<div class="new-contact-item">
 						<c:choose>
-							<c:when test="${allCRequests.size() > 0}">
-								<c:forEach items="${allCRequests}" var="crequest">
+							<c:when test="${allCRequestsUserResponse.size() > 0}">
+								<c:forEach items="${allCRequestsUserResponse}" var="crequest">
 									<div class="row">
 										<div class="col-lg-1 col-xs-1">
 											<img src="resources/img/avatar-big.png"
@@ -379,15 +377,16 @@
 											<c:when test="${crequest.getStatus() == 'open'}">
 												<input type="hidden" name="userRequestId"
 													value="${crequest.getRequest().getId()}" />
-												<input type="hidden" name="actionValue" value="" />
+												<!-- 												<input type="hidden" name="actionValue" value="" /> -->
+												<!-- 												<input type="hidden" name="page" value="contactlist" /> -->
 												<div class="col-lg-2 col-xs-2">
 													<!-- 													<button class="btn btn-primary" type="submit">Annehmen</button> -->
 													<a class="btn btn-primary"
-														href="/main-web/contact/replycrequest?userRequestId=${crequest.getRequest().getId()}&actionValue=accept">Akzeptieren</a>
+														href="/main-web/contactlist/replycrequest?userRequestId=${crequest.getRequest().getId()}&actionValue=accept&page=contactlist">Bestätigen</a>
 												</div>
 												<div class="col-lg-2 col-xs-2">
 													<a class="btn btn-default"
-														href="/main-web/contact/replycrequest?userRequestId=${crequest.getRequest().getId()}&actionValue=reject">Ablehnen</a>
+														href="/main-web/contactlist/replycrequest?userRequestId=${crequest.getRequest().getId()}&actionValue=reject&page=contactlist">Ablehnen</a>
 													<!-- 													<button class="btn btn-default" type="submit">Ablehnen</button> -->
 												</div>
 
@@ -413,240 +412,33 @@
 					</div>
 				</div>
 
-				<!-- 			  	<div class="new-contact-item"> -->
-				<!-- 				  	<div class="row"> -->
-				<!-- 					  	<div class="col-lg-1 col-xs-1"> -->
-				<!-- 					  		<img src="img/avatar-big.png" class="img-responsive"> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-4 col-xs-4"> -->
-				<!-- 					  		<h4>Franz Mustermann</h4> -->
-				<!-- 					  		<span>Lehrer</span> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-2 col-xs-2"> -->
-				<!-- 					  		<button class="btn btn-primary" type="submit">Annehmen</button> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-2 col-xs-2"> -->
-				<!-- 					  		<button class="btn btn-default" type="submit">Ablehnen</button> -->
-				<!-- 					  	</div> -->
-				<!-- 				  	</div> -->
-				<!-- 			  	</div> -->
-				<!-- 			  	<div class="new-contact-item"> -->
-				<!-- 				  	<div class="row"> -->
-				<!-- 					  	<div class="col-lg-1 col-xs-1"> -->
-				<!-- 					  		<img src="img/avatar-big.png" class="img-responsive"> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-4 col-xs-4"> -->
-				<!-- 					  		<h4>Franz Mustermann</h4> -->
-				<!-- 					  		<span>Lehrer</span> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-2 col-xs-2"> -->
-				<!-- 					  		<button class="btn btn-primary" type="submit">Annehmen</button> -->
-				<!-- 					  	</div> -->
-				<!-- 					  	<div class="col-lg-2 col-xs-2"> -->
-				<!-- 					  		<button class="btn btn-default" type="submit">Ablehnen</button> -->
-				<!-- 					  	</div> -->
-				<!-- 				  	</div> -->
-				<!-- 			  	</div> -->
-				<!-- 			  </div> -->
 				<div class="tab-pane" id="Lehrer">
 					<div class="adress-book">
 						<div class="contact-list-wrapper">
 							<div class="contact-list wrapper-2">
 								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
+									<c:forEach items="${allContactUsers}" var="user">
+										<c:choose>
+											<c:when test="${user.getUsertype() == 'teacher'}">
+												<div class="row">
+													<div class="col-lg-2 col-xs-2">
+														<img src="resources/img/avatar-big.png"
+															class="img-responsive">
+													</div>
 
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
+													<div class="col-lg-4 col-xs-4">
+														<span>${user.getFullName()}</span>
+													</div>
+													<div class="col-lg-4 col-xs-4">
+														<button class="btn btn-default" type="submit">Nachricht
+															schreiben</button>
+													</div>
+												</div>
+											</c:when>
+											<c:otherwise>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
 								</div>
 							</div>
 							<div class="write-all">
@@ -731,7 +523,6 @@
 										nibh, ut fermentum massa justo sit amet risus. </span>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -740,200 +531,28 @@
 						<div class="contact-list-wrapper">
 							<div class="contact-list wrapper-2">
 								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
+									<c:forEach items="${allContactUsers}" var="user">
+										<c:choose>
+											<c:when test="${user.getUsertype() == 'parent'}">
+												<div class="row">
+													<div class="col-lg-2 col-xs-2">
+														<img src="resources/img/avatar-big.png"
+															class="img-responsive">
+													</div>
 
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
+													<div class="col-lg-4 col-xs-4">
+														<span>${user.getFullName()}</span>
+													</div>
+													<div class="col-lg-4 col-xs-4">
+														<button class="btn btn-default" type="submit">Nachricht
+															schreiben</button>
+													</div>
+												</div>
+											</c:when>
+											<c:otherwise>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
 								</div>
 							</div>
 							<div class="write-all">
@@ -1027,200 +646,28 @@
 						<div class="contact-list-wrapper">
 							<div class="contact-list wrapper-2">
 								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
+									<c:forEach items="${allContactUsers}" var="user">
+										<c:choose>
+											<c:when test="${user.getUsertype() == 'other'}">
+												<div class="row">
+													<div class="col-lg-2 col-xs-2">
+														<img src="resources/img/avatar-big.png"
+															class="img-responsive">
+													</div>
 
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
-								</div>
-								<div class="contact-item">
-									<div class="row">
-										<div class="col-lg-2 col-xs-2">
-											<img src="resources/img/avatar-big.png"
-												class="img-responsive">
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<span>Mustermann Franz</span>
-										</div>
-										<div class="col-lg-4 col-xs-4">
-											<button class="btn btn-default" type="submit">Nachricht
-												schreiben</button>
-										</div>
-									</div>
+													<div class="col-lg-4 col-xs-4">
+														<span>${user.getFullName()}</span>
+													</div>
+													<div class="col-lg-4 col-xs-4">
+														<button class="btn btn-default" type="submit">Nachricht
+															schreiben</button>
+													</div>
+												</div>
+											</c:when>
+											<c:otherwise>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
 								</div>
 							</div>
 							<div class="write-all">

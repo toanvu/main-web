@@ -14,21 +14,18 @@ import de.edunet24.usermanager.entityInterfaces.ILogin;
 import de.edunet24.usermanager.entityInterfaces.IUserManager;
 
 public class ContactHandler {
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(ContactHandler.class);
-	
+
 	private ILogin loginBean;
 	private IUserManager userManager;
 	private IContactManager contactManager;
-	
-	
-	private List<User> allUsers; 
-	
-	public void init(){
-		allUsers = userManager.getAllUser(); 
-	}
-	
+
+//	public void init() {
+//		allUsers = userManager.getAllUser();
+//	}
+
 	public void setLoginBean(ILogin loginBean) {
 		this.loginBean = loginBean;
 	}
@@ -52,21 +49,24 @@ public class ContactHandler {
 	public IContactManager getContactManager() {
 		return contactManager;
 	}
-	
-	
+
 	public List<User> getAllUsers() {
-		return allUsers;
+		return userManager.getAllUser();
+	}
+	
+	public List<CRequest> getAllCRequests() {
+		return contactManager.getAllCRequests();
+	}
+	
+	public List<User> getContactUsers(List<Contact> contacts, User user){
+		return contactManager.getContactUsers(contacts, user);
 	}
 
-	public void setAllUsers(List<User> allUsers) {
-		this.allUsers = allUsers;
-	}
-	
-	public List<User> searchUsers(String firstname, String lastname){
+	public List<User> searchUsers(String firstname, String lastname) {
 		logger.info("start search user");
-		
+
 		List<User> listUsers = null;
-		
+
 		if ((lastname != null && !lastname.equals(""))
 				&& (firstname != null && !firstname.equals(""))) {
 			listUsers = userManager.getUserByFullname(firstname, lastname);
@@ -77,63 +77,67 @@ public class ContactHandler {
 		}
 
 		logger.info("end search user");
-		
+
 		return listUsers;
 	}
-	
-	public void addCRequest(int userId, String message){
-		
+
+	public void addCRequest(int userId, String message) {
+
 		User userResponse = getUserById(userId);
 		User userRequest = loginBean.getUser();
-		CRequest crequest = contactManager.createCRequest(userRequest, userResponse, message);
+		CRequest crequest = contactManager.createCRequest(userRequest,
+				userResponse, message);
 		crequest.setCreatedDate(new Date());
-		contactManager.addCRequest(crequest);
 	}
-	
-	public User getUserById(int userId){
-		
-		for (User u : allUsers) {
+
+	public User getUserById(int userId) {
+
+		for (User u : userManager.getAllUser()) {
 			if (u.getId() == userId) {
-				logger.info("Found user with name: "+u.getFullName());
+				logger.info("Found user with name: " + u.getFullName());
 				return u;
 			}
 		}
 		return null;
 	}
-	
-	public List<CRequest> getRequestByUserResponse(){
+
+	public List<CRequest> getRequestByUserResponse() {
 		return contactManager.getRequestByUserResponse(loginBean.getUser());
 	}
-	
-	public List<CRequest> getRequestByUserRequest(){
+
+	public List<CRequest> getRequestByUserRequest() {
 		return contactManager.getRequestByUserRequest(loginBean.getUser());
 	}
-	
-	public List<Contact> getAllContact(){
+
+	public List<Contact> getAllContact() {
 		return contactManager.getContacts(loginBean.getUser());
 	}
-	
-	public void replyCRequest(int userRequestId, String action){
+
+	public void replyCRequest(int userRequestId, String action) {
 
 		User userRequest = getUserById(userRequestId);
 		User currentUser = loginBean.getUser();
+
+		logger.info("action " + action);
+		logger.info("update status for userRequestId: " + userRequestId
+				+ " userResponseId: " + currentUser.getId());
 		
-		logger.info("action "+action);
+		logger.info("update status for userRequest: " + userRequest
+				+ " userResponse: " + currentUser);
 		contactManager.updateCRequestStatus(action, userRequest, currentUser);
-		
+
 		if (action.equals("accept")) {
-			Contact contact = contactManager.createContact(userRequest, currentUser);
+			Contact contact = contactManager.createContact(userRequest,
+					currentUser);
 			contact.setCreatedDate(new Date());
-			contactManager.addContact(contact);
 		}
-		
-		contactManager.deleteCRequest(contactManager.getCRequest(userRequest, currentUser));
-		
+
+		contactManager.deleteCRequest(contactManager.getCRequest(userRequest,
+				currentUser));
 	}
-	
-	
-	public boolean checkPermission(){
+
+	public boolean checkPermission() {
 		return loginBean.isLogin();
 	}
-	
+
 }

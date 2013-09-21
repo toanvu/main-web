@@ -30,9 +30,7 @@
 
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" id="head-bar">
 	  <a class="navbar-brand" href="#"><img src="resources/img/logo.png"></a>
-	  <form:form action="/main-web/logout" method="POST">
-	  	 <button type="submit" class="btn btn-danger pull-right">Abmelden (${currentUser.getUsername()})</button>
-	  </form:form>
+	  <a href=/main-web/logout class="btn btn-danger pull-right">Abmelden (${currentUser.getUsername()})</a>
 	  <ul class="languages pull-right">
     	<li>Sprache:</li>
 		<li><a href="#" class="tooltip-toggle" data-toggle="tooltip" data-placement="bottom" title="Deutsch"><img src="resources/img/flag_de.png" alt="Flagge Deutschland"></a></li>
@@ -57,10 +55,10 @@
 		  				<a href="neue-gruppennachricht.html"><img src="resources/img/account-icons/edit.png"> Gruppennachricht schreiben</a>
 		  			</li>
 					<li>
-						<a href="index.html"><img src="resources/img/account-icons/home16.png"> Startseite</a>
+						<a href="./"><img src="resources/img/account-icons/home16.png"> Startseite</a>
 					</li>
 				    <li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
-				    <li><a href="kontakte.html"><img src="resources/img/account-icons/address-book.png"> Kontakte</a></li>
+				    <li><a href="contactlist"><img src="resources/img/account-icons/address-book.png"> Kontakte</a></li>
 				    <li class="active"><a href="contact"><img src="resources/img/account-icons/user-plus.png"> Kontakte hinzufügen</a></li>
 				    <li><a href="kalender.html"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
 				    <li><a href="einstellungen.html"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
@@ -354,8 +352,16 @@
 										<c:when test="${listContactUsers.contains(user)}">
 											<span class="btn btn-default">Kontakt ist im Adressbuch</span>
 										</c:when>
-										<c:when test="${listCRequestUsers.contains(user)}">
+										<c:when test="${listCReUserResponse.contains(user)}">
 											<span class="btn btn-success">Anfrage gesendet</span>
+										</c:when>
+										<c:when test="${listCReUserRequest.contains(user)}">
+<!-- 											<input type="hidden" name="actionValue" value="" /> -->
+<!-- 											<input type="hidden" name="page" value="contact" /> -->
+											<a class="btn btn-primary" style="width:98px;!important"
+												href="/main-web/contactlist/replycrequest?userRequestId=${user.getId()}&actionValue=accept&page=contact">Bestätigen</a>
+											<a class="btn btn-default" style="width:98px;!important"
+												href="/main-web/contactlist/replycrequest?userRequestId=${user.getId()}&actionValue=reject&page=contact">Ablehnen</a>
 										</c:when>
 										<c:otherwise>
 											<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#add-Kontakt" onclick="addContact('${user.getFullName()}', '${user.getId()}')">Kontakt hinzufügen</button>

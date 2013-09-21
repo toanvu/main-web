@@ -28,10 +28,10 @@ public class ContactController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ContactController.class);
-	
+
 	private ContactHandler contactHandler;
 	private MessageHandler messageHandler;
-		
+
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
 	}
@@ -45,31 +45,36 @@ public class ContactController {
 	 */
 	@RequestMapping(value = "/contact", method = RequestMethod.GET)
 	public String home(Model model, HttpSession session) {
-		
+
 		if (!messageHandler.isBridgeSessionOk(session)) {
 			return "redirect:../home-web";
 		}
 		model.addAttribute("currentUser", messageHandler.getCurrentUser());
-		
+
 		logger.info("Calling message modul");
-		if(!model.containsAttribute("allUsers")){
+		if (!model.containsAttribute("allUsers")) {
 			List<User> allUsers = contactHandler.getAllUsers();
 			init(model, allUsers);
 		}
-		
+
 		return "contact";
 	}
 
 	@RequestMapping(value = "/contactSearchUser", method = RequestMethod.POST)
 	public String searchUsers(
 			@RequestParam(value = "sfirstname") String firstname,
-			@RequestParam(value = "slastname") String lastname,
-			Locale locale, Model model, HttpSession session) {
-		
-		if ((firstname == null || firstname.equals("")) && (lastname == null || lastname.equals(""))) {
+			@RequestParam(value = "slastname") String lastname, Locale locale,
+			Model model, HttpSession session) {
+
+		if (!messageHandler.isBridgeSessionOk(session)) {
+			return "redirect:../home-web";
+		}
+
+		if ((firstname == null || firstname.equals(""))
+				&& (lastname == null || lastname.equals(""))) {
 			return "redirect:../../contact";
 		}
-		
+
 		logger.info("start search user");
 
 		List<User> users = contactHandler.searchUsers(firstname, lastname);
@@ -77,121 +82,129 @@ public class ContactController {
 		logger.info("end search user");
 		return "contact";
 	}
-	
+
 	@RequestMapping(value = "/contactAddCrequest", method = RequestMethod.POST)
 	public String addCRequest(
 			@RequestParam(value = "userResponseId") String userId,
-			@RequestParam(value = "requestMes") String message,
-			Model model) {
-		
-		if (!contactHandler.checkPermission()) {
-			return "redirect:/";
+			@RequestParam(value = "requestMes") String message, Model model,
+			HttpSession session) {
+
+		if (!messageHandler.isBridgeSessionOk(session)) {
+			return "redirect:../home-web";
 		}
-		
+
 		logger.info("start add contact request");
-		
+		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+
 		contactHandler.addCRequest(Integer.parseInt(userId), message);
 		List<User> allUsers = contactHandler.getAllUsers();
 		init(model, allUsers);
 		logger.info("end add contact request");
 		return "contact";
 	}
-	
+
 	@RequestMapping(value = "/contactlist", method = RequestMethod.GET)
 	public String contactList(Model model, HttpSession session) {
-		
-		if (!contactHandler.checkPermission()) {
-			return "redirect:/";
+		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+
+		if (!messageHandler.isBridgeSessionOk(session)) {
+			return "redirect:../home-web";
 		}
+
+		List<CRequest> allCRequestsUserResponse = contactHandler.getRequestByUserResponse();
+
+		logger.info("all requests: " + allCRequestsUserResponse);
+		logger.info("all requests size: " + allCRequestsUserResponse.size());
+
+		model.addAttribute("allCRequestsUserResponse", allCRequestsUserResponse);
 		
-		List<CRequest> allCRequests = contactHandler.getRequestByUserResponse();
-
-		logger.info("all requests: " + allCRequests);
-		logger.info("all requests size: " + allCRequests.size());
-
-		model.addAttribute("allCRequests", allCRequests);
+		logger.info(" all contacts: "+contactHandler.getAllContact());
+		logger.info(" allContactUsers: "+contactHandler.getContactUsers(contactHandler.getAllContact(),
+				messageHandler.getCurrentUser()));
+		
+		model.addAttribute("allContactUsers",
+				contactHandler.getContactUsers(contactHandler.getAllContact(),
+						messageHandler.getCurrentUser()));
 		return "contactlist";
 	}
 
-	@RequestMapping(value = "/contact/replycrequest", method = RequestMethod.GET)
+	@RequestMapping(value = "/contactlist/replycrequest", method = RequestMethod.GET)
 	public String replyCRequest(
 			@RequestParam(value = "userRequestId") int userRequestId,
 			@RequestParam(value = "actionValue") String actionValue,
-			Model model, HttpSession session) {
-		
-		if (!contactHandler.checkPermission()) {
-			return "redirect:/";
+			@RequestParam(value = "page") String page, Model model,
+			HttpSession session) {
+
+		if (!messageHandler.isBridgeSessionOk(session)) {
+			return "redirect:../home-web";
 		}
-		
+
 		contactHandler.replyCRequest(userRequestId, actionValue);
-		
-		model.addAttribute("allCRequests", contactHandler.getRequestByUserResponse());
-		return "contactlist";
+
+		model.addAttribute("allCRequestsUserResponse",
+				contactHandler.getRequestByUserResponse());
+		if (page.equals("contactlist")) {
+			return "redirect:../contactlist";
+		} else if (page.equals("contact"))
+			return "redirect:../contact";
+		return null;
 	}
-	
-	public void init(Model model, List<User> users){
-		
+
+	public void init(Model model, List<User> users) {
+
 		for (User user : users) {
-			if(user.getId() == messageHandler.getUserId()){
+			if (user.getId() == messageHandler.getUserId()) {
 				users.remove(user);
 				break;
 			}
 		}
-		
+
 		List<User> listContactUsers = new ArrayList<User>();
-		List<User> listCRequestUsers = new ArrayList<User>();
-		
+		List<User> listCReUserResponse = new ArrayList<User>();
+		List<User> listCReUserRequest = new ArrayList<User>();
+
 		List<Contact> allContacts = contactHandler.getAllContact();
-		List<CRequest> allCRequests = contactHandler.getRequestByUserRequest();
-		
-		logger.info("allContacts: "+ allContacts);
-		logger.info("allCRequests: "+ allCRequests);
-		
-		
+		List<CRequest> allCRequests = contactHandler.getRequestByUserResponse();
+		allCRequests.addAll(contactHandler.getRequestByUserRequest());
+
+		logger.info("allContacts: " + allContacts);
+		logger.info("allCRequests: " + allCRequests);
+
 		for (User user : users) {
-			
+
 			for (Contact contact : allContacts) {
-				if(contact.getUser1().getId() == user.getId() || contact.getUser2().getId() == user.getId()){
+				if (contact.getUser1().getId() == user.getId()
+						|| contact.getUser2().getId() == user.getId()) {
 					listContactUsers.add(user);
 					break;
-				}		
+				}
 			}
 			for (CRequest crequest : allCRequests) {
-//				logger.info("crequest.getResponse().getId() "+crequest.getResponse().getId());
-//				logger.info("user.getId()"+user.getId());
-				if(crequest.getResponse().getId() == user.getId()){
-					logger.info("anfrage gesendet an "+ user.getFullName());
-					listCRequestUsers.add(user);
-					break;
+				logger.info("crequest.getResponse().getId() "
+						+ crequest.getResponse().getId());
+				logger.info("crequest.getRequest().getId() "
+						+ crequest.getRequest().getId());
+				logger.info("user.getId()" + user.getId());
+				if (crequest.getResponse().getId() == user.getId()) {
+					logger.info("anfrage gesendet an " + user.getFullName());
+					listCReUserResponse.add(user);
+				}
+
+				if (crequest.getRequest().getId() == user.getId()) {
+					logger.info("anfrage bekommt " + user.getFullName());
+					listCReUserRequest.add(user);
 				}
 			}
 
 		}
-		logger.info("listContactUsers: "+ listContactUsers);
-		logger.info("listCRequestUsers: "+ listCRequestUsers);
-		
+		logger.info("listContactUsers: " + listContactUsers);
+		logger.info("listCReUserResponse: " + listCReUserResponse);
+		logger.info("listCReUserRequest: " + listCReUserRequest);
+
 		model.addAttribute("allUsers", users);
 		model.addAttribute("listContactUsers", listContactUsers);
-		model.addAttribute("listCRequestUsers", listCRequestUsers);
+		model.addAttribute("listCReUserResponse", listCReUserResponse);
+		model.addAttribute("listCReUserRequest", listCReUserRequest);
 	}
-	
-	
-//	@RequestMapping(value = "/contact/sendrequest", method = RequestMethod.POST)
-//	public String sendContactRequest(
-//			@RequestParam(value = "userId") int userId, 
-//			Model model, HttpSession session) {
-//		
-//		if (!contactHandler.checkPermission()) {
-//			return "redirect:/";
-//		}
-//		
-//		logger.info("start sending request message");
-//		
-//		User userResponse = contactHandler.getUserById(userId);
-////		logger.info("Found user with name: "+userResponse.getFullName());
-//		model.addAttribute("userResponse", userResponse);
-//
-//		logger.info("end sending request message");
-//		return "sendrequest";
-//	}
+
 }
