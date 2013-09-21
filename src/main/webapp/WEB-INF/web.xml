@@ -19,14 +19,19 @@
         <description>WebSocketHandler</description>
         <servlet-name>WebSocketHandler</servlet-name>
         <servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
+        <init-param>
+          <param-name>org.atmosphere.cpr.broadcasterClass</param-name>
+          <param-value>org.atmosphere.cpr.DefaultBroadcaster</param-value>
+		</init-param>
         <load-on-startup>0</load-on-startup>
-        <async-supported>true</async-supported>       
+        <async-supported>true</async-supported>        
     </servlet>
     
     <servlet-mapping>
         <servlet-name>WebSocketHandler</servlet-name>
-        <url-pattern>/pubsub/*</url-pattern>
+        <url-pattern>/chat/*</url-pattern>        
     </servlet-mapping>
+   
 
 	<!-- Processes application requests -->
 	<servlet>

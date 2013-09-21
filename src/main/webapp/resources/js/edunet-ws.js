@@ -1795,7 +1795,7 @@ function controlSubscribe() {
 		//main-web is container,
 		//pubsub ist servlet mapped by web.xml
 		//control will be looked up by broadcaster to publish the mesasges		
-		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/atmo-web/pubsub/control';		
+		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/chat/1';		
 		this.connectedEndpoint = jQuery.atmosphere.subscribe(location,
 			!callbackAdded ? this.callback : null,
 					jQuery.atmosphere.request = { 
@@ -1812,12 +1812,12 @@ function controlUnsubscribe(){
 	jQuery.atmosphere.unsubscribe();
 }
 
-function ControlManager() {
+function ControlManager(name) {
 	this.suscribe = controlSubscribe;
 	this.unsubscribe = controlUnsubscribe;
 	this.connect = controlConnect;
 	this.callback = callback;
-	this.connect();
+	this.connect(name);
 	this.actions = cm_actions;
 }
 
@@ -1832,20 +1832,22 @@ function hideItem(id) {
 function post() {
 	
 	var request = jQuery.ajax({
-//		url: '/main-web/services/message/receiver',		
-		url: '/atmo-web/rest/control/toggle' ,
+		url: '/main-web/chat',		
+//		url: '/atmo-web/rest/control/toggle' ,
 		type: 'POST',
 		data:  {authorId : 2 ,groupId :5, message : "test message"},
-		contentType:"application/json; charset=utf-8",
+		contentType:"xml/application; charset=utf-8",
 	});
 				
 	request.fail(function(jqXHR, textStatus) {
   		alert( "Request failed: " + textStatus );
 	});
+	
+	
 }
 
 
 jQuery(document).ready(function($){
-	$('#cp-1').hide();	
-	cm = new ControlManager();
+		
+	cm = new ControlManager(name);
  });
