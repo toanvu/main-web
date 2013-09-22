@@ -49,7 +49,7 @@ public class ContactController {
 		if (!messageHandler.isBridgeSessionOk(session)) {
 			return "redirect:../home-web";
 		}
-		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+		model.addAttribute("currentUser", messageHandler.getCurrentUser(session));
 
 		logger.info("Calling message modul");
 		if (!model.containsAttribute("allUsers")) {
@@ -94,7 +94,7 @@ public class ContactController {
 		}
 
 		logger.info("start add contact request");
-		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+		model.addAttribute("currentUser", messageHandler.getCurrentUser(session));
 
 		contactHandler.addCRequest(Integer.parseInt(userId), message);
 		List<User> allUsers = contactHandler.getAllUsers();
@@ -105,7 +105,7 @@ public class ContactController {
 
 	@RequestMapping(value = "/contactlist", method = RequestMethod.GET)
 	public String contactList(Model model, HttpSession session) {
-		model.addAttribute("currentUser", messageHandler.getCurrentUser());
+		model.addAttribute("currentUser", messageHandler.getCurrentUser(session));
 
 		if (!messageHandler.isBridgeSessionOk(session)) {
 			return "redirect:../home-web";
@@ -120,11 +120,11 @@ public class ContactController {
 		
 		logger.info(" all contacts: "+contactHandler.getAllContact());
 		logger.info(" allContactUsers: "+contactHandler.getContactUsers(contactHandler.getAllContact(),
-				messageHandler.getCurrentUser()));
+				messageHandler.getCurrentUser(session)));
 		
 		model.addAttribute("allContactUsers",
 				contactHandler.getContactUsers(contactHandler.getAllContact(),
-						messageHandler.getCurrentUser()));
+						messageHandler.getCurrentUser(session)));
 		return "contactlist";
 	}
 

@@ -13,13 +13,22 @@ import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
 import de.edunet24.message.entityInterfaces.IMessage;
 import de.edunet24.usermanager.entityBeans.User;
+import de.edunet24.usermanager.entityImp.IESession;
 import de.edunet24.usermanager.entityInterfaces.ILogin;
 import de.edunet24.usermanager.entityInterfaces.IUserManager;
 
 public class MessageHandler {
-	private static ILogin loginBean;
-	private static IUserManager userManager;
-	private static IMessage messageBean;
+
+	private  ILogin loginBean;
+
+	private  IUserManager userManager;
+
+	private  IMessage messageBean;
+	
+	private IESession sessionBean;
+	
+	private 
+	
 	Map<Integer,GroupsByRole> groupsByRoles ;
 	
 	private static final Logger logger = LoggerFactory
@@ -27,6 +36,10 @@ public class MessageHandler {
 
 	 public void init() {
 		
+	}
+	 
+	 public MessageHandler() {
+		 
 	}
 
 	/**
@@ -39,6 +52,8 @@ public class MessageHandler {
 				.getId();
 
 	}
+	
+	
 
 	public List<Message> update(int groupId) {
 		// update current group for MessageBean
@@ -61,16 +76,16 @@ public class MessageHandler {
 		return loginBean.getUser().getId();
 	}
 	
-	public User getCurrentUser(){
-		return loginBean.getUser();
+	public User getCurrentUser(HttpSession session){
+		return sessionBean.getUser((Integer) session.getAttribute("currentUserId"));
 	}
 	
 	/**
 	 * get all groups for each usertype of current user
 	 * @return
 	 */
-	private Map<Integer,GroupsByRole> getGroupByRoles(){
-		logger.info("current user is :"+ this.getCurrentUser().getUsername());
+	private Map<Integer,GroupsByRole> getGroupByRoles(HttpSession session){
+		logger.info("current user is :"+ this.getCurrentUser(session).getUsername());
 		return messageBean.getGroupsByRole();
 	}
 	
@@ -78,16 +93,16 @@ public class MessageHandler {
 	 * get teacher groups
 	 * @return
 	 */
-	public List<EGroup> getTeacherGroup(){		
-		return getGroupByRoles().get(1).getValue();
+	public List<EGroup> getTeacherGroup(HttpSession session){		
+		return getGroupByRoles(session).get(1).getValue();
 	}
 	
-	public List<EGroup> getParentGroup(){
-		return getGroupByRoles().get(2).getValue();
+	public List<EGroup> getParentGroup(HttpSession session){
+		return getGroupByRoles(session).get(2).getValue();
 	}
 	
-	public List<EGroup> getOtherGroup(){
-		return getGroupByRoles().get(3).getValue();
+	public List<EGroup> getOtherGroup(HttpSession session){
+		return getGroupByRoles(session).get(3).getValue();
 	}
 	
 	/**
@@ -95,23 +110,30 @@ public class MessageHandler {
 	 * @param session
 	 * @return
 	 */
-	public static boolean isBridgeSessionOk(HttpSession session){		
+	public  boolean isBridgeSessionOk(HttpSession session){		
 		try {			
-			int userIdFromHome = (Integer) session.getServletContext().getContext("/{applicationContextRoot}").getAttribute("currentUserId");
-			if(loginBean.getUser() == null && userIdFromHome > 0){
-				loginBean.setUser(userManager.getUser(userIdFromHome));
-				//init for messageBean
-				messageBean.initilizeBean(loginBean.getUser());
-			}
-			//if nouser cached and id from home is null too.
-			if(loginBean.getUser() == null && userIdFromHome == 0){
-				return false;
-			}
+			int userIdFromHome = (Integer) session.getServletContext().getContext("/{applicationContextRoot}").getAttribute("currentUserId");		
+			System.out.println("loginbean : "+loginBean.getUser().getUsername());
+			if(session.getAttribute("currentUserId") == null){
+				if(userIdFromHome > 0){					
+					//save user into edunet session 
+					sessionBean.saveUser(userManager.getUser(userIdFromHome));
+					session.setAttribute("currentUserId", userIdFromHome);
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				System.out.println("currentuser id : "+ session.getAttribute("currentUserId"));
+				return true;
+			}			
 		} catch (Exception e) {			
 			logger.error("can not get CurrentUserId from home-app : "+ e.getMessage());
-			return false;			
+			System.out.println("userid from main : "+  session.getAttribute("currentUserId"));
+			System.out.println("loginbean : "+loginBean.getUser().getUsername());
+			return session.getAttribute("currentUserId") != null;			
 		}	
-		return true;
+		
 	}
 
 	public  ILogin getLoginBean() {
@@ -119,7 +141,7 @@ public class MessageHandler {
 	}
 
 	public  void setLoginBean(ILogin loginBean) {
-		MessageHandler.loginBean = loginBean;
+		this.loginBean = loginBean;
 	}
 
 	public  IUserManager getUserManager() {
@@ -127,7 +149,7 @@ public class MessageHandler {
 	}
 
 	public  void setUserManager(IUserManager userManager) {
-		MessageHandler.userManager = userManager;
+		this.userManager = userManager;
 	}
 
 	public IMessage getMessageBean() {
@@ -144,6 +166,10 @@ public class MessageHandler {
 
 	public void setGroupsByRoles(Map<Integer, GroupsByRole> groupsByRoles) {
 		this.groupsByRoles = groupsByRoles;
+	}
+
+	public void setSessionBean(IESession sessionBean) {
+		this.sessionBean = sessionBean;
 	}
 	
 	

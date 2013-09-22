@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<atmosphere-handlers>
-	<atmosphere-handler context-root="/chat"
-		class-name="de.edunet.main.services.WebSocketHandler" support-session="true"
-		broadcaster="org.atmosphere.cpr.DefaultBroadcaster">
-
-	</atmosphere-handler>
-</atmosphere-handlers>

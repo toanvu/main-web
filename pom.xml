@@ -118,16 +118,16 @@
 		</dependency>        
 		
 		<!--  edunet dependencies -->
-<!-- 		<dependency>  -->
-<!-- 		    <groupId>de.edunet24.dev</groupId>  -->
-<!--  		    <artifactId>commonejb</artifactId>  -->
-<!--  		    <version>1.0.1-SNAPSHOT</version> -->
-<!--  		</dependency> -->
-<!--  		<dependency>  -->
-<!-- 		    <groupId>de.edunet24.dev</groupId>  -->
-<!--  		    <artifactId>edunet-utils</artifactId>  -->
-<!--  		    <version>1.0.1-SNAPSHOT</version> 		     -->
-<!--  		</dependency> -->
+		<dependency> 
+		    <groupId>de.edunet24.dev</groupId> 
+ 		    <artifactId>commonejb</artifactId> 
+ 		    <version>1.0.1-SNAPSHOT</version>
+ 		</dependency>
+ 		<dependency> 
+		    <groupId>de.edunet24.dev</groupId> 
+ 		    <artifactId>edunet-utils</artifactId> 
+ 		    <version>1.0.1-SNAPSHOT</version> 		    
+ 		</dependency>
  		<!-- atmosphere -->
  		  <dependency>
       <groupId>org.atmosphere</groupId>

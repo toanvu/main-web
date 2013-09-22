@@ -2,32 +2,34 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	
+
 	<!-- Definition of EJBs -->
-	<bean id="loginBean"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
+	<bean id="loginBean" class="org.springframework.jndi.JndiObjectFactoryBean"
+		scope="prototype">
 		<property name="jndiName" value="java:global/commonejb/LoginBean" />
 	</bean>
 
-	<bean id="userManager"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName"
-			value="java:global/commonejb/UserManager" />
+	<bean id="userManager" class="org.springframework.jndi.JndiObjectFactoryBean"
+		scope="prototype">
+		<property name="jndiName" value="java:global/commonejb/UserManager" />
 	</bean>
-	
-	<bean id="contactManager"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName"
-			value="java:global/commonejb/ContactManager" />
+
+	<bean id="messageBean" class="org.springframework.jndi.JndiObjectFactoryBean"
+		scope="prototype">
+		<property name="jndiName" value="java:global/commonejb/MessageBean" />
 	</bean>
-	
-	<bean id="messageBean"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName"
-			value="java:global/commonejb/MessageBean" />
+
+	<bean id="contactManager" class="org.springframework.jndi.JndiObjectFactoryBean"
+		scope="singleton">
+		<property name="jndiName" value="java:global/commonejb/ContactManager" />
+	</bean>
+
+	<bean id="sessionBean" class="org.springframework.jndi.JndiObjectFactoryBean"
+		scope="singleton">
+		<property name="jndiName" value="java:global/commonejb/ESessionBean" />
 	</bean>
 	<!-- End definition of EJBs -->
-		
+
 </beans>

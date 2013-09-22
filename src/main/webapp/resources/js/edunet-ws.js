@@ -1783,7 +1783,7 @@ function callback(response) {
 		if (response.status == 200) {
 			var data = response.responseBody;
 			if (data.length > 0) {
-				alert(data);
+				jQuery("#edunet-context-messageContentArea").val(data);
 			}
 		}
 	}
@@ -1794,8 +1794,10 @@ function controlSubscribe() {
 //		var url = jQuery.url.setUp();
 		//main-web is container,
 		//pubsub ist servlet mapped by web.xml
-		//control will be looked up by broadcaster to publish the mesasges		
-		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/chat/1';		
+		//control will be looked up by broadcaster to publish the mesasges
+		var userId = jQuery("#edunet-context-userId").text();
+//		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/chat/'+userId;
+		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/services/message/receiver?channel='+userId;
 		this.connectedEndpoint = jQuery.atmosphere.subscribe(location,
 			!callbackAdded ? this.callback : null,
 					jQuery.atmosphere.request = { 
@@ -1829,13 +1831,17 @@ function hideItem(id) {
 	jQuery(id).hide();
 }
 
-function post() {
-	
+function post() {	
+	var userId = jQuery("#edunet-context-userId").text();
+	var groupId= jQuery("#currentGroupId").text();
+	var toSendMessage =  jQuery("#toSendMessage").text();
+	var groupId= jQuery("#edunet-context-channels").text();
+	var channels = userId;
 	var request = jQuery.ajax({
-		url: '/main-web/chat',		
-//		url: '/atmo-web/rest/control/toggle' ,
+//		url: '/main-web/chat',
+		url: '/main-web/services/message/receiver?channel=4',
 		type: 'POST',
-		data:  {authorId : 2 ,groupId :5, message : "test message"},
+		data:  {authorId : userId ,groupId :groupId, message :toSendMessage, toChannel: channels },
 		contentType:"xml/application; charset=utf-8",
 	});
 				
