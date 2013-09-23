@@ -23,9 +23,9 @@ public class MeteorAtmosphereResourceResolver implements HandlerMethodArgumentRe
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
 		Meteor m = Meteor.build(httpServletRequest);		
-		if (m.transport() == TRANSPORT.LONG_POLLING) {
-			m.resumeOnBroadcast(true).suspend(-1);			
-		}
+//		if (m.transport() == TRANSPORT.LONG_POLLING) {
+//			m.resumeOnBroadcast(true).suspend(-1);			
+//		}
 		return m.getAtmosphereResource();
 	}
 }

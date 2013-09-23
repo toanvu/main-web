@@ -1784,24 +1784,24 @@ function callback(response) {
 			var data = response.responseBody;
 			if (data.length > 0) {
 				jQuery("#edunet-context-messageContentArea").val(data);
+				alert(data);
 			}
 		}
 	}
 }
 
 function controlSubscribe() {
-	if (!this.callbackAdded) {		
-//		var url = jQuery.url.setUp();
+	if (!this.callbackAdded) {
 		//main-web is container,
 		//pubsub ist servlet mapped by web.xml
 		//control will be looked up by broadcaster to publish the mesasges
 		var userId = jQuery("#edunet-context-userId").text();
 //		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/chat/'+userId;
-		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/services/message/receiver?channel='+userId;
+		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/services/message/receiver/'+userId;
 		this.connectedEndpoint = jQuery.atmosphere.subscribe(location,
 			!callbackAdded ? this.callback : null,
-					jQuery.atmosphere.request = { 
-				transport: 'websocket' 
+					jQuery.atmosphere.request = {
+					transport: 'websocket'	
 			}
 		);
 		
@@ -1833,15 +1833,15 @@ function hideItem(id) {
 
 function post() {	
 	var userId = jQuery("#edunet-context-userId").text();
-	var groupId= jQuery("#currentGroupId").text();
+	var currentGroupId= jQuery("#currentGroupId").text();
 	var toSendMessage =  jQuery("#toSendMessage").text();
-	var groupId= jQuery("#edunet-context-channels").text();
+	var toMessengers= jQuery("#edunet-context-channels").text();
 	var channels = userId;
 	var request = jQuery.ajax({
 //		url: '/main-web/chat',
-		url: '/main-web/services/message/receiver?channel=4',
+		url: '/main-web/services/message/post/'+2,
 		type: 'POST',
-		data:  {authorId : userId ,groupId :groupId, message :toSendMessage, toChannel: channels },
+		data:  {authorId : userId ,groupId : 1, message :"say hello to you", toChannels: 2 },
 		contentType:"xml/application; charset=utf-8",
 	});
 				

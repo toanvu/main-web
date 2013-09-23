@@ -41,7 +41,7 @@
         <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
         <!--  edunet context --> 
 
-	<script src="/main-web/resources/js/jquery-1.6.4.min.js" type="text/javascript"></script>	        
+	<script src="/main-web/resources/js/jquery-1.6.4.min.js" type="text/javascript"></script>
 	<script src="/main-web/resources/js/edunet-ws.js" type="text/javascript"></script>
 
 
@@ -627,8 +627,8 @@
 	<!-- /.modal -->
 
 
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- 	<script -->
+<!-- 		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 	<script>
 		window.jQuery
 				|| document

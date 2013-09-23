@@ -8,12 +8,17 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.PathParam;
 
 import org.atmosphere.cpr.ApplicationConfig;
+import org.atmosphere.cpr.AtmosphereRequest;
 import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.AtmosphereResourceFactory;
+import org.atmosphere.cpr.AtmosphereResponse;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.cpr.HeaderConfig;
+import org.atmosphere.cpr.MetaBroadcaster;
 import org.atmosphere.websocket.WebSocketEventListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.tags.ParamAware;
 
 import com.google.gson.Gson;
 
@@ -61,47 +68,41 @@ public class MessengerReceiverController {
 	public MessengerReceiverController(BroadcasterFactory bf, MessageHandler messageHandler) {
 		this.messageHanlder = messageHandler;
 		this.bf = bf;
-		this.initialiseBroadcaster();
 	}
 
-	/**
-	 * Start broadcasting the time every 5 seconds using the /comet/time
-	 * broadcaster.
-	 */
-	private void initialiseBroadcaster() {
-		final Broadcaster b = this.bf.lookup("/main-web/services/message/receiver?channel=4", true);
-	}
+
 	
 
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping("/services/message/receiver")
+	@RequestMapping(value="/services/message/receiver/{channel}" , method = RequestMethod.GET)
 	@ResponseBody
-	public void listen(AtmosphereResource aResource,HttpSession session){
+	public void listen(AtmosphereResource aResource,HttpSession session , @PathParam(value="channel") String channel){
 //			   @RequestParam int authorId,
 //			   @RequestParam String toChannels,
 //			   @RequestParam int groupId,
 //			   @RequestParam String message) {
-		HttpServletRequest request = aResource.getRequest();
-		HttpServletResponse response = aResource.getResponse();
+		AtmosphereRequest request = aResource.getRequest();
+		AtmosphereResponse response = aResource.getResponse();
+//		String atmosphereId = response.getHeader(ATMOSPHERE_TRACKING_ID);
 		String method = request.getMethod();
 
-		String channel = "4";
+		
 		// Suspend the response.
-		if ("GET".equalsIgnoreCase(method)) {
-
+		if ("GET".equalsIgnoreCase(method)) {			
 			// Log all events on the console, including WebSocket events.
 			aResource.addEventListener(new WebSocketEventListenerAdapter());
 
 			response.setContentType("text/html;charset=ISO-8859-1");
-
-			System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbb "+getLookupBroadCaster(channel));
-			Broadcaster broadcast = BroadcasterFactory.getDefault().lookup("/main-web/services/message/receiver?channel=4", true);
-			aResource.setBroadcaster(broadcast);
+			response.setHeader("Access-Control-Expose-Headers", HeaderConfig.X_ATMOSPHERE_TRACKING_ID);
+			
+		
+			
 			String atmoTransport = request
 					.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
 
+			
 			if (atmoTransport != null
 					&& !atmoTransport.isEmpty()
 					&& atmoTransport
@@ -110,19 +111,44 @@ public class MessengerReceiverController {
 				request.setAttribute(ApplicationConfig.RESUME_ON_BROADCAST,
 						Boolean.TRUE);
 				aResource.suspend(-1, false);				
-				broadcast.broadcast("hello");
+				
 
 			} else {
 				// connection etablisched				
-				aResource.suspend(-1);		
-				broadcast.broadcast("hello");
+				aResource.suspend(-1);
+				
+				Broadcaster broadcast = this.bf.getDefault().lookup(getLookupBroadCaster(channel,true), true);
+				broadcast.broadcast(" atmo key ");
 			}
 		}		
 		
+	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value="/services/message/post/{channel}", method = RequestMethod.POST)
+	@ResponseBody
+	public void post(AtmosphereResource aResource,HttpSession session , @PathParam(value="channel") String channel){
+//			   @RequestParam int authorId,
+//			   @RequestParam String toChannels,
+//			   @RequestParam int groupId,
+//			   @RequestParam String message) {
+		AtmosphereRequest request = aResource.getRequest();
+		AtmosphereResponse response = aResource.getResponse();
+		String method = request.getMethod();
+		
 		//post poart
-		if ("POST".equalsIgnoreCase(method)) {
-			System.out.println("post something");
-			Broadcaster broadcast = BroadcasterFactory.getDefault().lookup("/main-web/services/message/receiver?channel=4", true);
+		if ("POST".equalsIgnoreCase(method)) {	
+			String atmosphereId = request.getHeader(HeaderConfig.X_ATMOSPHERE_TRACKING_ID);
+//			 if (atmosphereId == null || atmosphereId.isEmpty())
+//		    {
+//		        log.error("Cannot add subscription, as the atmosphere tracking ID was not found");
+//		       
+//		    }
+			
+			AtmosphereResource originalResource = AtmosphereResourceFactory.getDefault().find(atmosphereId);
+			Broadcaster broadcast = this.bf.getDefault().lookup(getLookupBroadCaster(channel,true), true);
 
 			String postedUrl = "";
 			try {
@@ -132,18 +158,19 @@ public class MessengerReceiverController {
 				e.printStackTrace();
 			}
 			Map<String, String> parameters = this.getQueryMap(postedUrl);
-
+			
 			if (parameters.get("authorId") != null
 					&& parameters.get("groupId") != null
-					&& parameters.get("message") != null) {
-				broadcast.broadcast(parameters.get("authorId"));
+					&& parameters.get("message") != null && parameters.get("toChannels") != null ) {
+				
+				broadcast.broadcast(parameters.get("message"),originalResource);
 			}else{
-				broadcast.broadcast("aaaaaaaaaaaaaaaaaaaa"+messageHanlder.getCurrentUser(session).getUsername());
+				System.out.println("url has no parameters :"+messageHanlder.getCurrentUser(session).getUsername());				
 			}
 		}		
 	}
 
-	private static Map<String, String> getQueryMap(String query) {
+	private Map<String, String> getQueryMap(String query) {
 		String[] params = query.split("&");
 		Map<String, String> map = new HashMap<String, String>();
 		for (String param : params) {
@@ -156,8 +183,12 @@ public class MessengerReceiverController {
 		return map;
 	}
 
-	private String getLookupBroadCaster(String channel){
-		return "/main-web/services/message/receiver?channel="+channel;
+	private String getLookupBroadCaster(String channel, boolean get){
+		if(get){
+			return "/main-web/services/message/receiver/"+channel;
+		}
+		
+		return  "/main-web/services/message/post/"+channel;
 	}
 
 }
