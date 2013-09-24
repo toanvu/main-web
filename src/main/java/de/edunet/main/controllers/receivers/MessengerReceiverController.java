@@ -122,15 +122,15 @@ public class MessengerReceiverController {
 			WSMessageContainer messageContainer = new WSMessageContainer();
 			if (parameters.get("currentGroupId") != null) {
 				
-				messageContainer.setMessageOfGroup(messageHanlder
+				messageContainer.createMessageList(messageHanlder
 						.getMessageOfCurrentGroup(Integer.valueOf(parameters
 								.get("currentGroupId"))));				
 			}
 			
 			//getAll groups
-			messageContainer.setTeacherGroup(messageHanlder.getTeacherGroup(session));
-			messageContainer.setParentGroup(messageHanlder.getParentGroup(session));
-			messageContainer.setOtherGroup(messageHanlder.getOtherGroup(session));
+			messageContainer.createTeacherGroup(messageHanlder.getTeacherGroup(session));
+			messageContainer.createParentGroup(messageHanlder.getParentGroup(session));
+			messageContainer.createOtherGroup(messageHanlder.getOtherGroup(session));
 			
 			//transform to json
 			toTransferMessage = gson.toJson(messageContainer);
