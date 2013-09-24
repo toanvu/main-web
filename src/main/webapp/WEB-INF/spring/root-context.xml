@@ -32,4 +32,5 @@
 	</bean>
 	<!-- End definition of EJBs -->
 
+
 </beans>

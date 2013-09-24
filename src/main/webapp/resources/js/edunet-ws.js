@@ -1797,7 +1797,7 @@ function controlSubscribe() {
 		//control will be looked up by broadcaster to publish the mesasges
 		var userId = jQuery("#edunet-context-userId").text();
 //		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/chat/'+userId;
-		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/services/message/receiver/'+userId;
+		var location = jQuery.url.attr('protocol') + '://' + jQuery.url.attr('host') + ':' + jQuery.url.attr('port') + '/main-web/services/message/receiver?channel='+userId;
 		this.connectedEndpoint = jQuery.atmosphere.subscribe(location,
 			!callbackAdded ? this.callback : null,
 					jQuery.atmosphere.request = {
@@ -1839,7 +1839,7 @@ function post() {
 	var channels = userId;
 	var request = jQuery.ajax({
 //		url: '/main-web/chat',
-		url: '/main-web/services/message/post/'+2,
+		url: '/main-web/services/message/post?channel='+2,
 		type: 'POST',
 		data:  {authorId : userId ,groupId : 1, message :"say hello to you", toChannels: 2 },
 		contentType:"xml/application; charset=utf-8",

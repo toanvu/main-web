@@ -27,9 +27,7 @@ public class MessageHandler {
 	
 	private IESession sessionBean;
 	
-	private 
-	
-	Map<Integer,GroupsByRole> groupsByRoles ;
+	private	Map<Integer,GroupsByRole> groupsByRoles ;
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(MessageHandler.class);
@@ -55,7 +53,7 @@ public class MessageHandler {
 	
 	
 
-	public List<Message> update(int groupId) {
+	public List<Message> getMessageOfCurrentGroup(int groupId) {
 		// update current group for MessageBean
 		messageBean.updateCurrentGroup(groupId);		
 		List<Message> messageByGroup = messageBean.getMessagesOfCurrentGroup(
@@ -77,6 +75,9 @@ public class MessageHandler {
 	}
 	
 	public User getCurrentUser(HttpSession session){
+		//TODO do other way to init message bean
+		messageBean.initilizeBean(sessionBean.getUser((Integer) session.getAttribute("currentUserId")));
+		
 		return sessionBean.getUser((Integer) session.getAttribute("currentUserId"));
 	}
 	

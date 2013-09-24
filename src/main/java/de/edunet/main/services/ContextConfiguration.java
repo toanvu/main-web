@@ -16,14 +16,13 @@ import de.edunet.main.models.message.MessageHandler;
 @ComponentScan(basePackages = "de.edunet.main", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class ContextConfiguration {
 
-    /**
+	/**
      * A BroadcasterFactory (injected as a singleton) that enables client code to look up broadcasters.
      * @return
      */
     @Bean
-    public BroadcasterFactory broadcasterFactory() {
+    public BroadcasterFactory broadcasterFactory() {    	
         return BroadcasterFactory.getDefault();
     }
-    
-
+	
 }
