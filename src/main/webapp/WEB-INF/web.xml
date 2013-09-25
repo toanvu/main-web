@@ -19,6 +19,10 @@
       <param-name>org.atmosphere.cpr.broadcasterClass</param-name>
       <param-value>org.atmosphere.cpr.DefaultBroadcaster</param-value>
     </init-param>
+     <init-param>
+        <param-name>org.atmosphere.cpr.broadcasterLifeCyclePolicy</param-name>
+        <param-value>EMPTY_DESTROY</param-value>
+      </init-param>
     <init-param>
       <param-name>org.atmosphere.resumeOnBroadcast</param-name>
       <param-value>true</param-value>

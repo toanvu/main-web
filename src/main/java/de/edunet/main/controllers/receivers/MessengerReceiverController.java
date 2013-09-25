@@ -18,6 +18,7 @@ import org.atmosphere.cpr.AtmosphereResourceFactory;
 import org.atmosphere.cpr.AtmosphereResponse;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.cpr.BroadcasterLifeCyclePolicy;
 import org.atmosphere.cpr.HeaderConfig;
 
 import org.atmosphere.websocket.WebSocketEventListenerAdapter;
@@ -91,12 +92,16 @@ public class MessengerReceiverController {
 		String method = request.getMethod();
 
 		//lookup a broadcast 
-		Broadcaster bc = this.bf.getDefault().lookup("bc_" + channel);
+		Broadcaster bc = this.bf.lookup("bc_" + channel);
 		//if no was found then create a new one and add to global broadcaster with unique name to lookup later
 		if (bc == null) {
-			bc = this.bf.getDefault().get();
+			bc = this.bf.get();
 			aResource.setBroadcaster(bc);
-			this.bf.getDefault().add(bc, "bc_" + channel);
+			bc.addAtmosphereResource(aResource);
+			bc.setBroadcasterLifeCyclePolicy(BroadcasterLifeCyclePolicy.EMPTY_DESTROY);
+			this.bf.add(bc, "bc_" + channel);
+		}else{
+			bc.addAtmosphereResource(aResource);
 		}
 
 		// Suspend the response.
@@ -119,7 +124,7 @@ public class MessengerReceiverController {
 			// get parameter from request url
 			Map<String, String> parameters = this.getQueryMap(listenUrl);
 			String toTransferMessage ="";
-			WSMessageContainer messageContainer = new WSMessageContainer();
+			WSMessageContainer messageContainer = new WSMessageContainer(messageHanlder.getCurrentUser(session).getUsername());
 			if (parameters.get("currentGroupId") != null) {
 				
 				messageContainer.createMessageList(messageHanlder
@@ -133,11 +138,13 @@ public class MessengerReceiverController {
 			messageContainer.createOtherGroup(messageHanlder.getOtherGroup(session));
 			
 			//transform to json
-			toTransferMessage = gson.toJson(messageContainer);
-
+			toTransferMessage = gson.toJson(messageContainer);			
+			
 			String atmoTransport = request
 					.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
 
+			System.out.println("atmotransport  : "+atmoTransport);
+			
 			if (atmoTransport != null
 					&& !atmoTransport.isEmpty()
 					&& atmoTransport
@@ -146,12 +153,12 @@ public class MessengerReceiverController {
 				request.setAttribute(ApplicationConfig.RESUME_ON_BROADCAST,
 						Boolean.TRUE);
 				aResource.suspend(-1, false);
+				bc.broadcast(toTransferMessage);
 
 			} else {
-				// connection etablisched
-
-				aResource.suspend(-1);
-
+				// connection etablisched				
+				aResource.suspend(-1);					
+				
 				if(toTransferMessage.length()>0){
 					bc.broadcast(toTransferMessage);
 				}
