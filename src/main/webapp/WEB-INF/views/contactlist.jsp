@@ -61,26 +61,17 @@
 				<h3>Meine Funktionen</h3>
 			</header>
 			<nav class="hauptmenu">
-				<ul class="nav nav-pills nav-stacked">
-					<li class="nav-button"><a href="neue-gruppennachricht.html"><img
-							src="resources/img/account-icons/edit.png">
-							Gruppennachricht schreiben</a></li>
-					<li><a href="./"><img
-							src="resources/img/account-icons/home16.png"> Startseite</a></li>
-					<li><a href="neue-nachrichten.html"><img
-							src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
-					<li class="active"><a href=""><img
-							src="resources/img/account-icons/address-book.png">
-							Kontakte</a></li>
-					<li><a href="contact"><img
-							src="resources/img/account-icons/user-plus.png"> Kontakte
-							hinzufügen</a></li>
-					<li><a href="kalender.html"><img
-							src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
-					<li><a href="einstellungen.html"><img
-							src="resources/img/account-icons/wrench-screwdriver.png">
-							Einstellungen</a></li>
-				</ul>
+			<ul class="nav nav-pills nav-stacked">
+		  			<li class="nav-button">
+		  				<a href="neue-gruppennachricht.html"><img src="resources/img/account-icons/edit.png"> Gruppennachricht schreiben</a>
+		  			</li>
+					<li><a href="./"><img src="resources/img/account-icons/home16.png"> Startseite</a></li>
+					<li><a href="contact"><img src="resources/img/account-icons/user-plus.png"> Neue Kontakte</a></li>
+				    <li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
+				    <li class="active"><a href="contactlist"><img src="resources/img/account-icons/address-book.png"> Adressbuch</a></li>
+				    <li><a href="kalender.html"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
+				    <li><a href="setting"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
+	  			</ul>
 			</nav>
 
 			<div class="calendar">

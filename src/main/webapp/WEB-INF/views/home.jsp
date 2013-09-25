@@ -33,16 +33,13 @@
 			<img src="/main-web/resources/img/logo.png" />
 		</div>
 	</div>
-	
-	<!--  edunet context -->
-        <style>
-        	.edunet-context{ display: none;}
-        </style>
-        <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
-        <!--  edunet context --> 
 
-	<script src="/main-web/resources/js/jquery-1.6.4.min.js" type="text/javascript"></script>
-	<script src="/main-web/resources/js/edunet-ws.js" type="text/javascript"></script>
+	<script src="/main-web/resources/js/jquery-1.6.4.min.js"
+		type="text/javascript"></script>
+	<!--         <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script> -->
+	<!--         <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script> -->
+	<script src="/main-web/resources/js/edunet-ws.js"
+		type="text/javascript"></script>
 
 
 	<!--  websocket test -->
@@ -85,26 +82,17 @@
 				<h3>Meine Funktionen</h3>
 			</header>
 			<nav class="hauptmenu">
-				<ul class="nav nav-pills nav-stacked">
-					<li class="nav-button"><a href="neue-gruppennachricht.html"><img
-							src="resources/img/account-icons/edit.png">
-							Gruppennachricht schreiben</a></li>
-					<li class="active"><a href=""><img
-							src="resources/img/account-icons/home16.png"> Startseite</a></li>
-					<li><a href="#"><img
-							src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
-					<li><a href="contactlist"><img
-							src="resources/img/account-icons/address-book.png">
-							Kontakte</a></li>
-					<li><a href="contact"><img
-							src="resources/img/account-icons/user-plus.png"> Kontakt
-							hinzufügen</a></li>
-					<li><a href="#"><img
-							src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
-					<li><a href="#"><img
-							src="resources/img/account-icons/wrench-screwdriver.png">
-							Einstellungen</a></li>
-				</ul>
+			<ul class="nav nav-pills nav-stacked">
+		  			<li class="nav-button">
+		  				<a href="neue-gruppennachricht.html"><img src="resources/img/account-icons/edit.png"> Gruppennachricht schreiben</a>
+		  			</li>
+					<li class="active"><a href=""><img src="resources/img/account-icons/home16.png"> Startseite</a></li>
+					<li><a href="contact"><img src="resources/img/account-icons/user-plus.png"> Neue Kontakte</a></li>
+				    <li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
+				    <li><a href="contactlist"><img src="resources/img/account-icons/address-book.png"> Adressbuch</a></li>
+				    <li><a href="kalender.html"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
+				    <li><a href="setting"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
+	  			</ul>
 			</nav>
 
 			<div class="calendar">
@@ -627,8 +615,8 @@
 	<!-- /.modal -->
 
 
-<!-- 	<script -->
-<!-- 		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>
 		window.jQuery
 				|| document
