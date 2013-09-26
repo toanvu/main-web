@@ -39,6 +39,8 @@ import com.google.gson.Gson;
 
 import de.edunet.main.models.message.MessageHandler;
 import de.edunet.main.models.message.WSMessageContainer;
+import de.edunet24.dev.utils.common.EUtils;
+import de.edunet24.message.entityBeans.EGroup;
 
 /**
  * Handles requests for the application home page.
@@ -73,9 +75,12 @@ public class MessengerReceiverController {
 		this.bf = bf;
 	}
 	
-	@RequestMapping(value = "/chat/{currentGroupId}")
-	public String chat(Locale locale, Model model,HttpSession session, @PathParam(value="currentGroupId") int currentGroupId){
-		model.addAttribute("currentGroupId", currentGroupId);
+	@RequestMapping(value = "/chat")
+	public String chat(Locale locale, Model model,HttpSession session, @RequestParam(value="currentGroupId") int currentGroupId){
+		EGroup currentGroup = messageHanlder.getMessageBean().getGroup(currentGroupId);
+		model.addAttribute("currentUser",messageHanlder.getCurrentUser(session));
+		model.addAttribute("currentGroup", currentGroup);
+		model.addAttribute("toChannels",EUtils.buildChannels(currentGroup.getMessengers()));
 		return "chat";
 	}
 
@@ -93,14 +98,16 @@ public class MessengerReceiverController {
 
 		//lookup a broadcast 
 		Broadcaster bc = this.bf.lookup("bc_" + channel);
-		//if no was found then create a new one and add to global broadcaster with unique name to lookup later
+		//if no was found then create a new one and add to global broadcaster with unique name to lookup later		
 		if (bc == null) {
 			bc = this.bf.get();
 			aResource.setBroadcaster(bc);
+			//one bc has more resource, each new atmosphere resource created by a connection / refresh ....
 			bc.addAtmosphereResource(aResource);
 			bc.setBroadcasterLifeCyclePolicy(BroadcasterLifeCyclePolicy.EMPTY_DESTROY);
 			this.bf.add(bc, "bc_" + channel);
 		}else{
+			//one bc has more resource, each new atmosphere resource created by a connection / refresh ....
 			bc.addAtmosphereResource(aResource);
 		}
 
@@ -109,6 +116,7 @@ public class MessengerReceiverController {
 			// Log all events on the console, including WebSocket events.
 			aResource.addEventListener(new WebSocketEventListenerAdapter());
 
+			//do no delete
 			response.setContentType("text/html;charset=ISO-8859-1");
 			response.setHeader("Access-Control-Expose-Headers",
 					HeaderConfig.X_ATMOSPHERE_TRACKING_ID);
@@ -122,15 +130,17 @@ public class MessengerReceiverController {
 			}
 
 			// get parameter from request url
-			Map<String, String> parameters = this.getQueryMap(listenUrl);
+			Map<String, String> parameters = EUtils.getQueryMap(listenUrl);
 			String toTransferMessage ="";
 			WSMessageContainer messageContainer = new WSMessageContainer(messageHanlder.getCurrentUser(session).getUsername());
 			if (parameters.get("currentGroupId") != null) {
 				
 				messageContainer.createMessageList(messageHanlder
 						.getMessageOfCurrentGroup(Integer.valueOf(parameters
-								.get("currentGroupId"))));				
+								.get("currentGroupId")),session));	
+				
 			}
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa "+parameters.get("currentGroupId")+ " query : "+listenUrl);
 			
 			//getAll groups
 			messageContainer.createTeacherGroup(messageHanlder.getTeacherGroup(session));
@@ -190,7 +200,7 @@ public class MessengerReceiverController {
 				e.printStackTrace();
 			}
 			// get parameter from request url
-			Map<String, String> parameters = this.getQueryMap(postedUrl);
+			Map<String, String> parameters = EUtils.getQueryMap(postedUrl);
 
 			if (parameters.get("authorId") != null
 					&& parameters.get("groupId") != null
@@ -207,21 +217,7 @@ public class MessengerReceiverController {
 		}
 	}
 
-	private Map<String, String> getQueryMap(String query) {
-		Map<String, String> map = new HashMap<String, String>();
-		if(query == null || query ==""){
-			return map;
-		}
-		String[] params = query.split("&");		
-		for (String param : params) {
-			if (param.split("=").length > 1) {
-				String name = param.split("=")[0];
-				String value = param.split("=")[1];
-				map.put(name, value);
-			}
-		}
-		return map;
-	}
+	
 
 	private String getLookupBroadCaster(String channel, boolean get) {
 		if (get) {
