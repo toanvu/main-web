@@ -178,6 +178,11 @@
 			<artifactId>gson</artifactId>
 			<version>1.7.1</version>
 		 </dependency>
+		 <dependency>
+		     <groupId>de.edunet24.dev</groupId>
+		     <artifactId>edunet-utils</artifactId>
+  			 <version>1.0.1-SNAPSHOT</version>
+		 </dependency>
 	</dependencies>
 	<repositories>
 	    <repository>

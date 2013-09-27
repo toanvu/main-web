@@ -12,6 +12,7 @@ import de.edunet24.common.GroupsByRole;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
 import de.edunet24.message.entityInterfaces.IMessage;
+import de.edunet24.usermanager.entityBeans.EContext;
 import de.edunet24.usermanager.entityBeans.User;
 import de.edunet24.usermanager.entityImp.IESession;
 import de.edunet24.usermanager.entityInterfaces.ILogin;
@@ -73,7 +74,7 @@ public class MessageHandler {
 	
 	public User getCurrentUser(HttpSession session){
 		//TODO do other way to init message bean		
-		return sessionBean.getUser((Integer) session.getAttribute("currentUserId"));
+		return userManager.getUser(sessionBean.getContext((Integer) session.getAttribute("currentUserId")).getUserId());
 	}
 	
 	/**
@@ -111,8 +112,8 @@ public class MessageHandler {
 			System.out.println("loginbean : "+loginBean.getUser().getUsername());
 			if(session.getAttribute("currentUserId") == null){
 				if(userIdFromHome > 0){					
-					//save user into edunet session 
-					sessionBean.saveUser(userManager.getUser(userIdFromHome));
+					//save user into edunet session					
+					sessionBean.saveContext(sessionBean.createEContext(userManager.getUser(userIdFromHome),"de"));
 					session.setAttribute("currentUserId", userIdFromHome);
 					return true;
 				}else{
