@@ -7,6 +7,7 @@ $(function() {
             right: ""
         },
         editable: !0,
+        firstDay: 1,
         buttonText: {
             prev: "&lt;",
             next: "&gt;",

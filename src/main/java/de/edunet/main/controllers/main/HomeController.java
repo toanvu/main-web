@@ -55,9 +55,9 @@ public class HomeController {
 	
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(){
+	public String logout(HttpSession session){
 
-		messageHandler.getLoginBean().logout();
+		messageHandler.logout(session);
 		return "redirect:../home-web/";
 	}
 

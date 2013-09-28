@@ -76,7 +76,7 @@ public class MessageHandler {
 	public User getCurrentUser(HttpSession session){
 		//TODO do other way to init message bean	
 		System.out.println("currentUserId: "+session.getAttribute("currentUserId"));
-		return userManager.getUser(sessionBean.getContext((Integer) session.getAttribute("currentUserId")).getUserId());
+		return userManager.getUser(((Integer) session.getAttribute("currentUserId")));
 	}
 	
 	/**
@@ -173,6 +173,11 @@ public class MessageHandler {
 
 	public void setSessionBean(IESession sessionBean) {
 		this.sessionBean = sessionBean;
+	}
+
+	public void logout(HttpSession session) {
+		sessionBean.removeUser((Integer) session.getAttribute("currentUserId"));
+		session.setAttribute("currentUserId", null);
 	}
 	
 	

@@ -1,7 +1,6 @@
 #calendar {
   margin-bottom: 0;
   height: 100%;
-  overflow-y: scroll;
   padding-bottom: 80px;
   position: absolute;
   width: 100%;
@@ -46,6 +45,14 @@ html .fc,
 
 /* Header
 ------------------------------------------------------------------------*/
+.fc-header {
+  position: absolute;
+  z-index: 99;
+  background-color: white;
+  border-bottom: 1px solid #d2d4d4;
+  /* 	@include box-shadow(0 2px 1px rgba(black,.1)); */
+}
+
 .fc-header td {
   white-space: nowrap;
   padding: 10px 25px 0;
@@ -117,8 +124,8 @@ html .fc,
 .fc-sun.fc-widget-header, .fc-mon.fc-widget-header, .fc-tue.fc-widget-header, .fc-wed.fc-widget-header, .fc-thu.fc-widget-header, .fc-fri.fc-widget-header, .fc-sat.fc-widget-header {
   background-color: #eceded;
   color: #333333 !important;
-  height: 50px;
-  line-height: 50px;
+  height: 35px;
+  line-height: 35px;
   letter-spacing: 1pt;
 }
 
@@ -126,6 +133,10 @@ html .fc,
 ------------------------------------------------------------------------*/
 .fc-content {
   clear: both;
+  overflow-y: visible;
+  position: absolute;
+  padding-top: 52px;
+  height: 560px;
 }
 
 .fc-view {
@@ -449,7 +460,7 @@ table.fc-border-separate {
 
 .fc-grid .fc-day-number {
   float: right;
-  padding: 0 2px;
+  padding: 0 5px;
 }
 
 .fc-grid .fc-other-month .fc-day-number {
