@@ -42,6 +42,7 @@
 
 	<script src="/main-web/resources/js/jquery-1.6.4.min.js"
 		type="text/javascript"></script>
+<!-- 	<script src="/main-web/resources/js/2-3/jquery.atmosphere.js"></script> -->
     <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script>
     <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script>
 	<script src="/main-web/resources/js/edunet-ws.js"

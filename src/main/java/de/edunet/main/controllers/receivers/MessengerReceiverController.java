@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,6 @@ import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.cpr.BroadcasterLifeCyclePolicy;
 import org.atmosphere.cpr.HeaderConfig;
-
 import org.atmosphere.websocket.WebSocketEventListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ import de.edunet24.message.entityBeans.EGroup;
  * Handles requests for the application home page.
  */
 @Controller
-public class MessengerReceiverController {
+public class MessengerReceiverController  {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(MessengerReceiverController.class);
@@ -87,30 +87,33 @@ public class MessengerReceiverController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/services/message/receiver", method = RequestMethod.GET)
+	@RequestMapping(value = "/services/message/receiver")
 	@ResponseBody
 	public void listen(AtmosphereResource aResource, HttpSession session,
-			@RequestParam String channel) {
+			@RequestParam String channel,@RequestParam(value="currentGroupId", required=false) Integer currentGroupId) {
 
 		AtmosphereRequest request = aResource.getRequest();
 		AtmosphereResponse response = aResource.getResponse();
 		String method = request.getMethod();
-
-		//lookup a broadcast 
+		
+		
+		// ////////////////broadcaster////////////////////////
+		// lookup a broadcast
 		Broadcaster bc = this.bf.lookup("bc_" + channel);
-		//if no was found then create a new one and add to global broadcaster with unique name to lookup later		
+		// if no was found then create a new one and add to global
+		// broadcaster with unique name to lookup later
 		if (bc == null) {
 			bc = this.bf.get();
-			aResource.setBroadcaster(bc);
-			//one bc has more resource, each new atmosphere resource created by a connection / refresh ....
-			bc.addAtmosphereResource(aResource);
-			bc.setBroadcasterLifeCyclePolicy(BroadcasterLifeCyclePolicy.EMPTY_DESTROY);
-			this.bf.add(bc, "bc_" + channel);
-		}else{
-			//one bc has more resource, each new atmosphere resource created by a connection / refresh ....
-			bc.addAtmosphereResource(aResource);
-		}
 
+			bc.setBroadcasterLifeCyclePolicy(BroadcasterLifeCyclePolicy.EMPTY);
+			
+			this.bf.add(bc, "bc_" + channel);
+		}		
+		
+		
+		// ///////////////////////////////////////////////////
+
+		
 		// Suspend the response.
 		if ("GET".equalsIgnoreCase(method)) {
 			// Log all events on the console, including WebSocket events.
@@ -133,14 +136,17 @@ public class MessengerReceiverController {
 			Map<String, String> parameters = EUtils.getQueryMap(listenUrl);
 			String toTransferMessage ="";
 			WSMessageContainer messageContainer = new WSMessageContainer(messageHanlder.getCurrentUser(session).getUsername());
-			if (parameters.get("currentGroupId") != null) {
+			
+			if (currentGroupId != null) {
+				
+				
+//				//create fake message
+//				messageHanlder.send(4, "say something 1", session);
 				
 				messageContainer.createMessageList(messageHanlder
-						.getMessageOfCurrentGroup(Integer.valueOf(parameters
-								.get("currentGroupId")),session));	
+						.getMessageOfCurrentGroup(Integer.valueOf(currentGroupId),session));	
 				
-			}
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa "+parameters.get("currentGroupId")+ " query : "+listenUrl);
+			}			
 			
 			//getAll groups
 			messageContainer.createTeacherGroup(messageHanlder.getTeacherGroup(session));
@@ -148,12 +154,13 @@ public class MessengerReceiverController {
 			messageContainer.createOtherGroup(messageHanlder.getOtherGroup(session));
 			
 			//transform to json
-			toTransferMessage = gson.toJson(messageContainer);			
+			toTransferMessage = gson.toJson(messageContainer);	
+			
+			
 			
 			String atmoTransport = request
-					.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
-
-			System.out.println("atmotransport  : "+atmoTransport);
+					.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);			
+			
 			
 			if (atmoTransport != null
 					&& !atmoTransport.isEmpty()
@@ -162,35 +169,45 @@ public class MessengerReceiverController {
 
 				request.setAttribute(ApplicationConfig.RESUME_ON_BROADCAST,
 						Boolean.TRUE);
-				aResource.suspend(-1, false);
-				bc.broadcast(toTransferMessage);
+				if(aResource.isSuspended()){
+					bc.addAtmosphereResource(aResource);
+				}else{
+					aResource.suspend(-1);
+					bc.addAtmosphereResource(aResource);
+				}	
+				
+				
+				//one bc has more resource, each new atmosphere resource created by a connection / refresh ....			
+//				bc.addAtmosphereResource(aResource);
+//				aResource.setBroadcaster(bc).suspend(-1);				
+				System.out.println("is suspended : "+aResource.isSuspended());
+				
 
 			} else {
 				// connection etablisched				
-				aResource.suspend(-1);					
+				if(aResource.isSuspended()){
+					bc.addAtmosphereResource(aResource);
+				}else{
+					aResource.suspend(-1);
+					bc.addAtmosphereResource(aResource);
+				}
 				
+				//one bc has more resource, each new atmosphere resource created by a connection / refresh ....				
 				if(toTransferMessage.length()>0){
 					bc.broadcast(toTransferMessage);
 				}
 			}
+			
 		}
-
-	}
-
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/services/message/post", method = RequestMethod.POST)
-	@ResponseBody
-	public void post(AtmosphereResource aResource, HttpSession session,
-			@RequestParam String channel) {
-		AtmosphereRequest request = aResource.getRequest();
-		AtmosphereResponse response = aResource.getResponse();
-		String method = request.getMethod();
-
+		
+		////////////////////////////////////////////////
+		////////////////////////////////////////////////
+		////////////////////////////////////////////////
+		////////////////////////////////////////////////
 		// post poart
 		if ("POST".equalsIgnoreCase(method)) {
-			Broadcaster bc = this.bf.getDefault().lookup("bc_" + channel);
+
+			
 
 			String postedUrl = "";
 			try {
@@ -201,30 +218,27 @@ public class MessengerReceiverController {
 			}
 			// get parameter from request url
 			Map<String, String> parameters = EUtils.getQueryMap(postedUrl);
-
-			if (parameters.get("authorId") != null
-					&& parameters.get("groupId") != null
-					&& parameters.get("message") != null
-					&& parameters.get("toChannels") != null) {
-				System.out.println("try to broadcast something : "
-						+ parameters.get("toChannels"));
-				bc.broadcast(" try to broadcast somthing");
-
-			} else {
-				System.out.println("url has no parameters :"
-						+ messageHanlder.getCurrentUser(session).getUsername());
-			}
+			System.out.println("posted Url : "+postedUrl +"authorId: "+parameters.get("authorId"));
+//			if (parameters.get("authorId") != null
+//					&& parameters.get("groupId") != null
+//					&& parameters.get("message") != null
+//					&& parameters.get("toChannels") != null) {
+//				System.out.println("try to broadcast something : "
+//						+ parameters.get("toChannels"));
+//				bc.broadcast(" try to broadcast somthing");
+//
+//			} else {
+//				System.out.println("url has no parameters :"
+//						+ messageHanlder.getCurrentUser(session).getUsername());
+//			}
+			
+			System.out.println("end post request processing: "+bc.getID());
+			bc.broadcast("broadcast something to channel");
+			
 		}
+
 	}
 
 	
-
-	private String getLookupBroadCaster(String channel, boolean get) {
-		if (get) {
-			return "/main-web/services/message/receiver?channel=" + channel;
-		}
-
-		return "/main-web/services/message/post/" + channel;
-	}
 
 }

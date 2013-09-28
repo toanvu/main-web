@@ -65,7 +65,7 @@ public class MessageHandler {
 	public void send(int groupId, String text, HttpSession session) {
 		if(groupId>0){
 			// update current group for MessageBean				
-			messageBean.sendMessage(text,messageBean.getGroup(groupId),getCurrentUser(session));
+			logger.debug("send message ok :" + messageBean.sendMessage(text,messageBean.getGroup(groupId),getCurrentUser(session)));
 		}
 	}
 	
@@ -74,7 +74,8 @@ public class MessageHandler {
 	}
 	
 	public User getCurrentUser(HttpSession session){
-		//TODO do other way to init message bean		
+		//TODO do other way to init message bean	
+		System.out.println("currentUserId: "+session.getAttribute("currentUserId"));
 		return userManager.getUser(sessionBean.getContext((Integer) session.getAttribute("currentUserId")).getUserId());
 	}
 	
