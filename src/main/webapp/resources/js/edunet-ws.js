@@ -16,13 +16,19 @@
 				jQuery.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
 				if (response.status == 200) {
 					var data = response.responseBody;
-					if (data.length > 0) {
-						jQuery("#edunet-context-messageContentArea").val(data);						
+					if (data.length > 0) {												
 						var jsonData = JSON.parse(data);
 						var teacherGroup = jsonData.teacherGroup;
 						var messages = jsonData.messageOfGroup;
-						loadGroup(teacherGroup, "#teacherGroup");
-						loadMessage(messages);
+						var currentGroupId= jQuery("#edunet-context-currentGroupId").text();						
+						//add new message if response is a new message and belongs to currentGroupid						
+						if(jsonData.newMessage == true && jsonData.groupId == currentGroupId){							
+							addNewMessage(jsonData);
+						}else{
+							loadGroup(teacherGroup, "#teacherGroup");
+							loadMessage(messages);
+						}
+						
 					}
 				}
 			}
@@ -66,23 +72,24 @@
 		
 		
 		
-		function post() {	
+		function post() {			
 			var userId = jQuery("#edunet-context-userId").text();
-			var currentGroupId= jQuery("#currentGroupId").text();
-			var toSendMessage =  jQuery("#toSendMessage").text();
-			var toMessengers= jQuery("#edunet-context-channels").text();
-			var channels = userId;
-			var request = jQuery.ajax({
-		//		url: '/main-web/chat',
-				url: '/main-web/services/message/post?channel='+2,
+			var currentGroupId= jQuery("#edunet-context-currentGroupId").text();
+			var toSendMessage =  jQuery("#toSendMessage").val();
+			var toMessengers= jQuery("#edunet-context-toChannels").text();
+			var authorName = jQuery("#edunet-context-username").text();
+			
+			alert(userId+ " currentgroup : "+currentGroupId+" toSendMessage: "+ toSendMessage+" channels: "+toMessengers+" authorname : "+authorName);
+			jQuery.ajax({
+				url: '/main-web/services/message/receiver?channel='+userId,
 				type: 'POST',
-				data:  {authorId : userId ,groupId : 4, message :"say hello to you", toChannels: 2 },
-				contentType:"xml/application; charset=utf-8",
+				data:  {authorId: userId, authorName: authorName, currentGroupId: currentGroupId, message: toSendMessage, toChannels: toMessengers },
+				contentType:"text/html; charset=utf-8"
+			}).fail(function(jqXHR, textStatus) {
+		  		alert( "Request failed: " + textStatus );
 			});
 						
-			request.fail(function(jqXHR, textStatus) {
-		  		alert( "Request failed: " + textStatus );
-			});	
+			
 			
 		}
 		
@@ -115,6 +122,24 @@
 						+'</ul>'						
 						+'</header><div class="message-body"><p>'+messages[i].message+'</p></div>');
 			}
+		}
+		
+		function addNewMessage(newMessage){
+			var messageItem=document.createElement('div');
+			jQuery(messageItem).addClass("message-item").appendTo($("#chatContent"));
+			var row = document.createElement('div');
+			jQuery(row).addClass("row").appendTo(messageItem);
+			var avaDiv = document.createElement('div');
+			jQuery(avaDiv).addClass("col-lg-1 col-xs-1").appendTo(row).html('<img src="/main-web/resources/img/avatar-big.png" class="img-responsive">');
+			var messageRightDiv = document.createElement('div');
+			jQuery(messageRightDiv).addClass("col-lg-11 col-xs-11").appendTo(row).html('<header class="message-header"><h3>'
+					+newMessage.ownerName+'</h3>'
+					+'<ul class="pull-right">'
+					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/translate16.png"> Nachricht übersetzen</a></li>'
+					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/mail-forward.png"> Weiterleiten</a></li>'
+					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
+					+'</ul>'						
+					+'</header><div class="message-body"><p>'+newMessage.message+'</p></div>');
 		}
 		
 		

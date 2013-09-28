@@ -1,6 +1,8 @@
 package de.edunet.main.controllers.receivers;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -80,17 +82,23 @@ public class MessengerReceiverController  {
 		EGroup currentGroup = messageHanlder.getMessageBean().getGroup(currentGroupId);
 		model.addAttribute("currentUser",messageHanlder.getCurrentUser(session));
 		model.addAttribute("currentGroup", currentGroup);
-		model.addAttribute("toChannels",EUtils.buildChannels(currentGroup.getMessengers()));
+		model.addAttribute("toChannels",EUtils.buildChannels(messageHanlder.getMessageBean().getMessengerOfGroup(currentGroupId)));
 		return "chat";
 	}
 
 	/**
 	 * Simply selects the home view to render by returning its name.
+	 * 
 	 */
 	@RequestMapping(value = "/services/message/receiver")
 	@ResponseBody
 	public void listen(AtmosphereResource aResource, HttpSession session,
-			@RequestParam String channel,@RequestParam(value="currentGroupId", required=false) Integer currentGroupId) {
+			@RequestParam String channel,
+			@RequestParam(value="currentGroupId", required=false) Integer currentGroupId,
+			@RequestParam(value="authorId", required=false) Integer authorId,
+			@RequestParam(value="authorName", required=false) String authorName,
+			@RequestParam(value="message", required=false) String message,
+			@RequestParam(value="toChannels", required=false) String toChannels) throws IOException {
 
 		AtmosphereRequest request = aResource.getRequest();
 		AtmosphereResponse response = aResource.getResponse();
@@ -205,37 +213,29 @@ public class MessengerReceiverController  {
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
 		// post poart
-		if ("POST".equalsIgnoreCase(method)) {
-
-			
-
+		if ("POST".equalsIgnoreCase(method)) {		
 			String postedUrl = "";
-			try {
-				postedUrl = request.getReader().readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
+			postedUrl = URLDecoder.decode(request.getReader().readLine());
+		
 			// get parameter from request url
 			Map<String, String> parameters = EUtils.getQueryMap(postedUrl);
-			System.out.println("posted Url : "+postedUrl +"authorId: "+parameters.get("authorId"));
-//			if (parameters.get("authorId") != null
-//					&& parameters.get("groupId") != null
-//					&& parameters.get("message") != null
-//					&& parameters.get("toChannels") != null) {
-//				System.out.println("try to broadcast something : "
-//						+ parameters.get("toChannels"));
-//				bc.broadcast(" try to broadcast somthing");
-//
-//			} else {
-//				System.out.println("url has no parameters :"
-//						+ messageHanlder.getCurrentUser(session).getUsername());
-//			}
 			
-			System.out.println("end post request processing: "+bc.getID());
-			bc.broadcast("broadcast something to channel");
+			if(parameters.get("authorId") !=  null && parameters.get("currentGroupId") != null && parameters.get("message") !=  null && parameters.get("toChannels") != null){
+				messageHanlder.send(Integer.valueOf(parameters.get("currentGroupId")), parameters.get("message"), session);
+				for(String receiver : parameters.get("toChannels").split(",")){
+					Broadcaster bcReceiver = this.bf.lookup("bc_"+receiver);					
+					if(bcReceiver != null){
+						WSMessageContainer.MessageContainer messageContainer = new WSMessageContainer.MessageContainer((String)parameters.get("message"), new Date(),Integer.valueOf(parameters.get("authorId")),(String) parameters.get("authorName"),Integer.valueOf(parameters.get("currentGroupId")));						
+						messageContainer.setNewMessage(true);
+						bcReceiver.broadcast(gson.toJson(messageContainer));
+					}
+				}
+			}
 			
 		}
+		
+		
 
 	}
 

@@ -23,19 +23,13 @@
 	
 		<!--  websocket test -->
 
-	<input type="button" value="POST to server..." onclick="post()" />
-
-	<div class="controlPanel">
-		<div id="cp-1" class="cpitem">
-			<img src="/main-web/resources/img/logo.png" />
-		</div>
-	</div>
 	
 	<!--  edunet context -->
         <style>
         	.edunet-context{ display: none;}
         </style>
         <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
+        <div id="edunet-context-username" class="edunet-context">${currentUser.getUsername()}</div>
         <div id="edunet-context-currentGroupId" class="edunet-context">${currentGroup.getId()}</div>
         <div id="edunet-context-toChannels" class="edunet-context">${toChannels}</div>
         <!--  edunet context --> 
@@ -297,9 +291,8 @@
 				</div>
 	  		</header>
 
-	  		<div class="content" >
-	  			<div id="chatContent">
-	  			</div>
+	  		<div class="content" id="chatContent">
+	  		
 <%-- 	  			<c:forEach items="${chatContent}" var="message"> --%>
 <!-- 					<div class="message-item"> -->
 <!-- 			  			<div class="row"> -->
@@ -332,7 +325,7 @@
 		  	<footer class="message-write-footer">
 			  	<div class="message-toolbar">
 			  		<ul class="pull-left">
-			  			<li><a href="#"><img src="/main-web/resources/img/account-icons/paper-plane.png"> Senden</a></li>
+			  			<li><a href="#" onclick="post()"><img src="/main-web/resources/img/account-icons/paper-plane.png"> Senden</a></li>
 			  			<li><a href="#"><img src="/main-web/resources/img/account-icons/attachment16.png"> Anhang</a></li>
 			  		</ul>
 			  		<ul class="pull-right">
@@ -342,7 +335,7 @@
 			  	</div>
 
 			  	<div  class="message-write-area">
-				  	<textarea placeholder=""></textarea>
+				  	<textarea placeholder="" id="toSendMessage"></textarea>
 			  	</div>
 		  	</footer>
 		  	<footer class="meta-footer">
