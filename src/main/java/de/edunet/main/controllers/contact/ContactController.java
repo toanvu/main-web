@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import de.edunet.main.models.contact.ContactHandler;
 import de.edunet.main.models.message.MessageHandler;
 import de.edunet24.contact.entityBeans.CRequest;

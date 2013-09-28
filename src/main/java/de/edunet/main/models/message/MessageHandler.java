@@ -112,8 +112,12 @@ public class MessageHandler {
 			System.out.println("loginbean : "+loginBean.getUser().getUsername());
 			if(session.getAttribute("currentUserId") == null){
 				if(userIdFromHome > 0){					
-					//save user into edunet session					
-					sessionBean.saveContext(sessionBean.createEContext(userManager.getUser(userIdFromHome),"de"));
+					//save user into edunet session
+					//TODO : optimization
+					User loggingUser = userManager.getUser(userIdFromHome);
+//					Role role = userManager.getRole(userIdFromHome).get(0);
+					
+					sessionBean.saveContext(sessionBean.createEContext(loggingUser,loggingUser.getUsertype(),"de"));
 					session.setAttribute("currentUserId", userIdFromHome);
 					return true;
 				}else{
