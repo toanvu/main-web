@@ -54,4 +54,9 @@
 		<beans:property name="contactManager" ref="contactManager" />
 	</beans:bean>
 	
+	<beans:bean id="settingController" 
+			class="de.edunet.main.controllers.setting.SettingController">
+		<beans:property name="messageHandler" ref="messageService" />
+	</beans:bean>
+	
 </beans:beans>
