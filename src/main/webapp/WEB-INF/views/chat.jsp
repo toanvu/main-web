@@ -17,10 +17,7 @@
         <link rel="stylesheet" href="/main-web/resources/css/bootstrap.css">
         <link rel="stylesheet" href="/main-web/resources/css/screen.css">
         <script src="/main-web/resources/js/vendor/modernizr-2.6.2.min.js"></script>
-        <script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"></script>
-        <script src="/main-web/resources/js/jquery.url.js"></script>
-        <script src="/main-web/resources/js/jQuery.atmosphere.js"></script>
-        <script src="/main-web/resources/js/edunet-ws.js"></script>        
+          
     </head>
     <body>
 	
@@ -39,12 +36,14 @@
         	.edunet-context{ display: none;}
         </style>
         <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
-        <div id="edunet-context-currentGroupId" class="edunet-context">${currentGroupId)}</div>
-        <div id="edunet-context-toChannels" class="edunet-context"></div>
+        <div id="edunet-context-currentGroupId" class="edunet-context">${currentGroup.getId()}</div>
+        <div id="edunet-context-toChannels" class="edunet-context">${toChannels}</div>
         <!--  edunet context --> 
 
-	<script src="/main-web/resources/js/jquery-1.6.4.min.js" type="text/javascript"></script>
-	<script src="/main-web/resources/js/edunet-ws.js" type="text/javascript"></script>
+		<script src="/main-web/resources/js/jquery-1.6.4.min.js"type="text/javascript"></script>
+	    <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script>
+	    <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script>
+		<script src="/main-web/resources/js/edunet-ws.js" type="text/javascript"></script>
 
 
 	<!--  websocket test -->
@@ -168,19 +167,19 @@
 
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
-						  <c:forEach items="${teacherGroup}" var="group">
-						 	<a href="/main-web/chat/show?groupId=${group.getId()}&userId=${currentUser.getId()}" class="list-group-item new-message-received">
-							  <img src="/main-web/resources/img/account-icons/mail.png">							  	 
-							  	 <c:if test="${group.getMessengers().get(0).getId() == currentUser.getId()}">
-							  	 		${group.getMessengers().get(1).getUsername()}
-							  	 </c:if>
-							  	 <c:if test="${group.getMessengers().get(0).getId() != currentUser.getId()}">
-							  	 		${group.getMessengers().get(0).getUsername()}
-							  	 </c:if>
-							  <span class="badge">2</span>
-						  </a>
-						 </c:forEach>	
+						<div class="list-group" id="teacherGroup">
+<%-- 						  <c:forEach items="${teacherGroup}" var="group"> --%>
+<%-- 						 	<a href="/main-web/chat/show?groupId=${group.getId()}&userId=${currentUser.getId()}" class="list-group-item new-message-received"> --%>
+<!-- 							  <img src="/main-web/resources/img/account-icons/mail.png">							  	  -->
+<%-- 							  	 <c:if test="${group.getMessengers().get(0).getId() == currentUser.getId()}"> --%>
+<%-- 							  	 		${group.getMessengers().get(1).getUsername()} --%>
+<%-- 							  	 </c:if> --%>
+<%-- 							  	 <c:if test="${group.getMessengers().get(0).getId() != currentUser.getId()}"> --%>
+<%-- 							  	 		${group.getMessengers().get(0).getUsername()} --%>
+<%-- 							  	 </c:if> --%>
+<!-- 							  <span class="badge">2</span> -->
+<!-- 						  </a> -->
+<%-- 						 </c:forEach>	 --%>
 						</div>
 					</div>
 				</div>
@@ -298,29 +297,31 @@
 				</div>
 	  		</header>
 
-	  		<div class="content">
-	  			<c:forEach items="${chatContent}" var="message">
-					<div class="message-item">
-			  			<div class="row">
-				  			<div class="col-lg-1 col-xs-1">
-				  				<img src="/main-web/resources/img/avatar-big.png" class="img-responsive">
-				  			</div>
-				  			<div class="col-lg-11 col-xs-11">
-				  				<header class="message-header">
-					  				<h3>${message.getOwner().getUsername()}</h3>
-					  				<ul class="pull-right">
-						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/translate16.png"> Nachricht übersetzen</a></li>
-						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/mail-forward.png"> Weiterleiten</a></li>
-						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>
-					  				</ul>
-				  				</header>
-				  				<div class="message-body">
-					  				<p>${message.getText()}</p>
-				  				</div>
-				  			</div>
-			  			</div>
-			  		</div>
-				</c:forEach>	
+	  		<div class="content" >
+	  			<div id="chatContent">
+	  			</div>
+<%-- 	  			<c:forEach items="${chatContent}" var="message"> --%>
+<!-- 					<div class="message-item"> -->
+<!-- 			  			<div class="row"> -->
+<!-- 				  			<div class="col-lg-1 col-xs-1"> -->
+<!-- 				  				<img src="/main-web/resources/img/avatar-big.png" class="img-responsive"> -->
+<!-- 				  			</div> -->
+<!-- 				  			<div class="col-lg-11 col-xs-11"> -->
+<!-- 				  				<header class="message-header"> -->
+<%-- 					  				<h3>${message.getOwner().getUsername()}</h3> --%>
+<!-- 					  				<ul class="pull-right"> -->
+<!-- 						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/translate16.png"> Nachricht übersetzen</a></li> -->
+<!-- 						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/mail-forward.png"> Weiterleiten</a></li> -->
+<!-- 						  				<li><a href="#"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li> -->
+<!-- 					  				</ul> -->
+<!-- 				  				</header> -->
+<!-- 				  				<div class="message-body"> -->
+<%-- 					  				<p>${message.getText()}</p> --%>
+<!-- 				  				</div> -->
+<!-- 				  			</div> -->
+<!-- 			  			</div> -->
+<!-- 			  		</div> -->
+<%-- 				</c:forEach>	 --%>
 	  		
 	  		
 		  		
@@ -432,7 +433,7 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
 
 
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 	<script>window.jQuery || document.write('<script src="/main-web/resources/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="/main-web/resources/js/vendor/bootstrap.min.js"></script>
 	<script src="/main-web/resources/js/neu-2013.min.js"></script>

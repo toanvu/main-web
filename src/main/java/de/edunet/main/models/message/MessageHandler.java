@@ -12,6 +12,7 @@ import de.edunet24.common.GroupsByRole;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
 import de.edunet24.message.entityInterfaces.IMessage;
+import de.edunet24.usermanager.entityBeans.EContext;
 import de.edunet24.usermanager.entityBeans.User;
 import de.edunet24.usermanager.entityImp.IESession;
 import de.edunet24.usermanager.entityInterfaces.ILogin;
@@ -32,41 +33,38 @@ public class MessageHandler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MessageHandler.class);
 
-	 public void init() {
+	public void init() {
 		
 	}
 	 
-	 public MessageHandler() {
+	public MessageHandler() {
 		 
-	}
+	}	
 
 	/**
 	 * 
 	 * @param userId
 	 * @return groupid
 	 */
-	public int createNewGroup(int userId) {
-		return messageBean.chatWith(userManager.getUser(userId))
+	public int createNewGroup(int userId, HttpSession session) {
+		return messageBean.chatWith(userManager.getUser(userId), getCurrentUser(session))
 				.getId();
 
 	}
 	
 	
 
-	public List<Message> getMessageOfCurrentGroup(int groupId) {
-		// update current group for MessageBean
-		messageBean.updateCurrentGroup(groupId);		
+	public List<Message> getMessageOfCurrentGroup(int groupId, HttpSession session) {			
 		List<Message> messageByGroup = messageBean.getMessagesOfCurrentGroup(
-				messageBean.getCurrentGroup());
+				messageBean.getGroup(groupId),getCurrentUser(session));
 
 		return messageByGroup;
 	}
 
-	public void send(int groupId, String text) {
+	public void send(int groupId, String text, HttpSession session) {
 		if(groupId>0){
-			// update current group for MessageBean
-			messageBean.updateCurrentGroup(groupId);		
-			messageBean.sendMessage(text);
+			// update current group for MessageBean				
+			messageBean.sendMessage(text,messageBean.getGroup(groupId),getCurrentUser(session));
 		}
 	}
 	
@@ -75,19 +73,16 @@ public class MessageHandler {
 	}
 	
 	public User getCurrentUser(HttpSession session){
-		//TODO do other way to init message bean
-		messageBean.initilizeBean(sessionBean.getUser((Integer) session.getAttribute("currentUserId")));
-		
-		return sessionBean.getUser((Integer) session.getAttribute("currentUserId"));
+		//TODO do other way to init message bean		
+		return userManager.getUser(sessionBean.getContext((Integer) session.getAttribute("currentUserId")).getUserId());
 	}
 	
 	/**
 	 * get all groups for each usertype of current user
 	 * @return
 	 */
-	private Map<Integer,GroupsByRole> getGroupByRoles(HttpSession session){
-		logger.info("current user is :"+ this.getCurrentUser(session).getUsername());
-		return messageBean.getGroupsByRole();
+	private Map<Integer,GroupsByRole> getGroupByRoles(HttpSession session){		
+		return messageBean.getGroupsByRole(getCurrentUser(session));
 	}
 	
 	/**
@@ -117,8 +112,8 @@ public class MessageHandler {
 			System.out.println("loginbean : "+loginBean.getUser().getUsername());
 			if(session.getAttribute("currentUserId") == null){
 				if(userIdFromHome > 0){					
-					//save user into edunet session 
-					sessionBean.saveUser(userManager.getUser(userIdFromHome));
+					//save user into edunet session					
+					sessionBean.saveContext(sessionBean.createEContext(userManager.getUser(userIdFromHome),"de"));
 					session.setAttribute("currentUserId", userIdFromHome);
 					return true;
 				}else{

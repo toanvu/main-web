@@ -33,11 +33,17 @@
 			<img src="/main-web/resources/img/logo.png" />
 		</div>
 	</div>
+	<!--  edunet context -->
+     <style>
+     	.edunet-context{ display: none;}
+     </style>
+     <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
+     <!--  edunet context --> 
 
 	<script src="/main-web/resources/js/jquery-1.6.4.min.js"
 		type="text/javascript"></script>
-	<!--         <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script> -->
-	<!--         <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script> -->
+    <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script>
+    <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script>
 	<script src="/main-web/resources/js/edunet-ws.js"
 		type="text/javascript"></script>
 
@@ -189,20 +195,20 @@
 
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
+						<div class="list-group" id="teacherGroup">
 
-							<c:forEach items="${teacherGroup}" var="group">
-								<a href="/main-web/chat/show?groupId=${group.getId()}&userId=0"
-									class="list-group-item new-message-received"> <img
-									src="resources/img/account-icons/mail.png"> <c:if
-										test="${group.getMessengers().get(0).getId() == currentUser.getId()}">
-							  	 		${group.getMessengers().get(1).getUsername()}
-							  	 </c:if> <c:if
-										test="${group.getMessengers().get(0).getId() != currentUser.getId()}">
-							  	 		${group.getMessengers().get(0).getUsername()}
-							  	 </c:if> <span class="badge">2</span>
-								</a>
-							</c:forEach>
+<%-- 							<c:forEach items="${teacherGroup}" var="group"> --%>
+<%-- 								<a href="/main-web/chat/show?groupId=${group.getId()}&userId=0" --%>
+<!-- 									class="list-group-item new-message-received"> <img -->
+<%-- 									src="resources/img/account-icons/mail.png"> <c:if --%>
+<%-- 										test="${group.getMessengers().get(0).getId() == currentUser.getId()}"> --%>
+<%-- 							  	 		${group.getMessengers().get(1).getUsername()} --%>
+<%-- 							  	 </c:if> <c:if --%>
+<%-- 										test="${group.getMessengers().get(0).getId() != currentUser.getId()}"> --%>
+<%-- 							  	 		${group.getMessengers().get(0).getUsername()} --%>
+<%-- 							  	 </c:if> <span class="badge">2</span> --%>
+<!-- 								</a> -->
+<%-- 							</c:forEach> --%>
 
 						</div>
 					</div>
@@ -615,8 +621,8 @@
 	<!-- /.modal -->
 
 
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- 	<script -->
+<!-- 		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 	<script>
 		window.jQuery
 				|| document

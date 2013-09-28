@@ -6,16 +6,18 @@ import java.util.List;
 
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
+import de.edunet24.usermanager.entityBeans.User;
 
 public class WSMessageContainer {
 
+	private String currentUser ;
 	List<MessageContainer> messageOfGroup = new ArrayList<WSMessageContainer.MessageContainer>();
 	List<GroupContainer> teacherGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 	List<GroupContainer> parentGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 	List<GroupContainer> otherGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 
-	public WSMessageContainer() {
-
+	public WSMessageContainer(String currentUser) {
+		this.currentUser = currentUser;
 	}
 
 	public List<MessageContainer> getMessageOfGroup() {
@@ -73,9 +75,22 @@ public class WSMessageContainer {
 	private void createGroupList(List<GroupContainer> groupList,
 			List<EGroup> groups) {
 		for (EGroup group : groups) {
-			groupList.add(new GroupContainer(group.getGroupName(), group
+			//TODO : use a function of edunetutils to remove a word from a string with specified delimiter
+			String groupName = removeCurrentUser(group.getGroupName(),this.currentUser);			
+			groupList.add(new GroupContainer(groupName, group
 					.getId()));
 		}
+	}
+	
+	private String removeCurrentUser(String groupNames, String currentUser){
+		StringBuilder sb = new StringBuilder();
+		for(String groupName : groupNames.split(",")){
+			if(groupName.equalsIgnoreCase(currentUser)){
+				continue;
+			}
+			sb.append(","+groupName);
+		}		
+		return sb.toString().substring(1);
 	}
 
 	private static class GroupContainer {

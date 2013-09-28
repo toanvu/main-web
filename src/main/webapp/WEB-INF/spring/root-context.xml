@@ -6,18 +6,15 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
 	<!-- Definition of EJBs -->
-	<bean id="loginBean" class="org.springframework.jndi.JndiObjectFactoryBean"
-		scope="prototype">
+	<bean id="loginBean" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton">
 		<property name="jndiName" value="java:global/commonejb/LoginBean" />
 	</bean>
 
-	<bean id="userManager" class="org.springframework.jndi.JndiObjectFactoryBean"
-		scope="prototype">
+	<bean id="userManager" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton">
 		<property name="jndiName" value="java:global/commonejb/UserManager" />
 	</bean>
 
-	<bean id="messageBean" class="org.springframework.jndi.JndiObjectFactoryBean"
-		scope="prototype">
+	<bean id="messageBean" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton">
 		<property name="jndiName" value="java:global/commonejb/MessageBean" />
 	</bean>
 
