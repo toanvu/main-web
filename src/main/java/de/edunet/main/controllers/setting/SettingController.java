@@ -65,7 +65,8 @@ public class SettingController {
 	public String changeNewstype(
 			@RequestParam(value = "newstype") String[] newstype,
 			@RequestParam(value = "email") String email,
-			@RequestParam(value = "telefon") String telefon, HttpSession session) {
+			@RequestParam(value = "telefon") String telefon, 
+			Model model, HttpSession session) {
 
 		// TODO test
 		if (!messageHandler.isBridgeSessionOk(session)) {
@@ -73,13 +74,17 @@ public class SettingController {
 		}
 
 		User currentUser = messageHandler.getLoginBean().getUser();
+		if(!model.containsAttribute("currentUser"))
+			model.addAttribute("currentUser", currentUser);
+		
 		if (newstype.length > 1)
 			currentUser.setNewstype(newstype[0] + ", " + newstype[1]);
 		else
 			currentUser.setNewstype(newstype[0]);
 		currentUser.setEmail(email);
 		currentUser.setTelefon(telefon);
-
+		messageHandler.getUserManager().updateUser(currentUser);
+		
 		return "setting";
 	}
 

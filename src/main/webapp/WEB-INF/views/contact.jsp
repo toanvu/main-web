@@ -20,11 +20,39 @@
         <link rel="stylesheet" href="resources/css/screen.css">
         <script src="resources/js/vendor/modernizr-2.6.2.min.js"></script>
         <script type="text/javascript">
+
+        	var alphabet = new Array( "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+   	        		 "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
+        
 			function addContact(name, id){
 				document.getElementById("userResponseName").innerHTML = name;
 				document.getElementById("userResponseId").value = id;
 			}
+
+			function displayUserList(val){
+				for(var i= 0; i < alphabet.length ; i++ ){
+					if(alphabet[i] == val){
+						jQuery(".userList"+val).css("display", "inline");
+					}
+					else{
+						jQuery(".userList"+alphabet[i]).css("display", "none");
+					}
+				}
+			}
+
+			function resetCssClass(){
+				for(var i= 0; i < alphabet.length ; i++ ){	
+					jQuery(".userList"+alphabet[i]).css("display", "inline");
+				}
+			}
         </script>
+        <style type="text/css">
+         .userListA .userListB .userListC .userListD .userListE .userListF .userListG .userListH .userListI .userListJ
+         .userListK .userListL .userListM .userListN .userListO .userListP .userListQ .userListR .userListS .userListT
+         .userListU .userListV .userListW .userListX .userListY .userListZ {
+         	display:inline
+         }
+        </style>
     </head>
     <body>
 
@@ -289,11 +317,11 @@
 	  		</header>
 	  		<ul class="nav nav-tabs contact-tabs" id="contact-tab">
 			  <li class="active">
-			  	<a href="#Alle"><img src="resources/img/account-icons/address-book.png"> Alle</a>
+			  	<a href="#Alle" onclick="resetCssClass()"><img src="resources/img/account-icons/address-book.png"> Alle</a>
 			  </li>
-			  <li><a href="#Lehrer"><img src="resources/img/account-icons/address-book.png"> Lehrer</a></li>
-			  <li><a href="#Eltern"><img src="resources/img/account-icons/address-book.png"> Eltern</a></li>
-			  <li><a href="#Sonstige"><img src="resources/img/account-icons/address-book.png"> Sonstige</a></li>
+			  <li><a href="#Lehrer" onclick="resetCssClass()"><img src="resources/img/account-icons/address-book.png"> Lehrer</a></li>
+			  <li><a href="#Eltern" onclick="resetCssClass()"><img src="resources/img/account-icons/address-book.png"> Eltern</a></li>
+			  <li><a href="#Sonstige" onclick="resetCssClass()"><img src="resources/img/account-icons/address-book.png"> Sonstige</a></li>
 			</ul>
 
 			<div class="tab-content new-contacts wrapper-2">
@@ -330,7 +358,7 @@
 					<table class="table table-condensed">
 				        <tbody>
 				        <c:forEach items="${allUsers}" var="user">
-								<tr>
+								<tr class="userList${user.getLastname().toUpperCase().charAt(0)}" >
 									<td width="87px"><img src="resources/img/avatar-small.png"></td>
 									<td width="120px">${user.getLastname()}</td>
 									<td width="120px">${user.getFirstname()}</td>
@@ -404,7 +432,7 @@
 				          <c:forEach items="${allUsers}" var="user">
 								<c:choose>
 								<c:when test="${user.getUsertype() == 'teacher'}">
-								<tr>
+								<tr class="userList${user.getLastname().toUpperCase().charAt(0)}" >
 									<td width="87px"><img src="resources/img/avatar-small.png"></td>
 									<td width="120px">${user.getLastname()}</td>
 									<td width="120px">${user.getFirstname()}</td>
@@ -463,7 +491,7 @@
 				           <c:forEach items="${allUsers}" var="user">
 								<c:choose>
 									<c:when test="${user.getUsertype() == 'parent'}">
-										<tr>
+										<tr class="userList${user.getLastname().toUpperCase().charAt(0)}" >
 											<td width="87px"><img src="resources/img/avatar-small.png"></td>
 											<td width="120px">${user.getLastname()}</td>
 											<td width="120px">${user.getFirstname()}</td>
@@ -520,7 +548,7 @@
 				           <c:forEach items="${allUsers}" var="user">
 								<c:choose>
 									<c:when test="${user.getUsertype() == 'other'}">
-										<tr>
+										<tr class="userList${user.getLastname().toUpperCase().charAt(0)}" >
 											<td width="87px"><img src="resources/img/avatar-small.png"></td>
 											<td width="120px">${user.getLastname()}</td>
 											<td width="120px">${user.getFirstname()}</td>
@@ -550,32 +578,32 @@
 
 			<aside class="kontakt-hinzufuegen-alphabet">
 	         	<ul>
-		         	<li><a href="#A">A</a></li>
-		         	<li><a href="#B">B</a></li>
-		         	<li><a href="#C">C</a></li>
-		         	<li><a href="#D">D</a></li>
-		         	<li><a href="#E">E</a></li>
-		         	<li><a href="#F">F</a></li>
-		         	<li><a href="#G">G</a></li>
-		         	<li><a href="#H">H</a></li>
-		         	<li><a href="#I">I</a></li>
-		         	<li><a href="#J">J</a></li>
-		         	<li><a href="#K">K</a></li>
-		         	<li><a href="#L">L</a></li>
-		         	<li><a href="#M">M</a></li>
-		         	<li><a href="#N">N</a></li>
-		         	<li><a href="#O">O</a></li>
-		         	<li><a href="#P">P</a></li>
-		         	<li><a href="#Q">Q</a></li>
-		         	<li><a href="#R">R</a></li>
-		         	<li><a href="#S">S</a></li>
-		         	<li><a href="#T">T</a></li>
-		         	<li><a href="#U">U</a></li>
-		         	<li><a href="#V">V</a></li>
-		         	<li><a href="#W">W</a></li>
-		         	<li><a href="#X">X</a></li>
-		         	<li><a href="#Y">Y</a></li>
-		         	<li><a href="#Z">Z</a></li>
+		         	<li><a href="#A" onclick="displayUserList('A')">A</a></li>
+		         	<li><a href="#B" onclick="displayUserList('B')">B</a></li>
+		         	<li><a href="#C" onclick="displayUserList('C')">C</a></li>
+		         	<li><a href="#D" onclick="displayUserList('D')">D</a></li>
+		         	<li><a href="#E" onclick="displayUserList('E')">E</a></li>
+		         	<li><a href="#F" onclick="displayUserList('F')">F</a></li>
+		         	<li><a href="#G" onclick="displayUserList('G')">G</a></li>
+		         	<li><a href="#H" onclick="displayUserList('H')">H</a></li>
+		         	<li><a href="#I" onclick="displayUserList('I')">I</a></li>
+		         	<li><a href="#J" onclick="displayUserList('J')">J</a></li>
+		         	<li><a href="#K" onclick="displayUserList('K')">K</a></li>
+		         	<li><a href="#L" onclick="displayUserList('L')">L</a></li>
+		         	<li><a href="#M" onclick="displayUserList('M')">M</a></li>
+		         	<li><a href="#N" onclick="displayUserList('N')">N</a></li>
+		         	<li><a href="#O" onclick="displayUserList('O')">O</a></li>
+		         	<li><a href="#P" onclick="displayUserList('P')">P</a></li>
+		         	<li><a href="#Q" onclick="displayUserList('Q')">Q</a></li>
+		         	<li><a href="#R" onclick="displayUserList('R')">R</a></li>
+		         	<li><a href="#S" onclick="displayUserList('S')">S</a></li>
+		         	<li><a href="#T" onclick="displayUserList('T')">T</a></li>
+		         	<li><a href="#U" onclick="displayUserList('U')">U</a></li>
+		         	<li><a href="#V" onclick="displayUserList('V')">V</a></li>
+		         	<li><a href="#W" onclick="displayUserList('W')">W</a></li>
+		         	<li><a href="#X" onclick="displayUserList('X')">X</a></li>
+		         	<li><a href="#Y" onclick="displayUserList('Y')">Y</a></li>
+		         	<li><a href="#Z" onclick="displayUserList('Z')">Z</a></li>
 	         	</ul>
          	</aside>
 
@@ -816,11 +844,11 @@ Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus portt
 	<script>window.jQuery || document.write('<script src="resources/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="resources/js/vendor/bootstrap.min.js"></script>
 	<script src="resources/js/neu-2013.min.js"></script>
-	<script>
+	<script type="text/javascript">
 	$('#contact-tab a').click(function (e) {
 	  e.preventDefault()
-	  $(this).tab('show')
-	})
+	  $(this).tab('show');
+	});
 	</script>
 </body>
 </html>
