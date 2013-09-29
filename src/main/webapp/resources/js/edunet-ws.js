@@ -26,7 +26,15 @@
 							addNewMessage(jsonData);
 						}else{
 							loadGroup(teacherGroup, "#teacherGroup");
+							loadGroup(teacherGroup, "#parentGroup");
+							loadGroup(teacherGroup, "#otherGroup");
+							loadGroup(teacherGroup, "#groups");
 							loadMessage(messages);
+						}
+						
+						if(jsonData.newGroup == true){			
+							alert(jsonData);
+							addNewGroup(jsonData,'#groups');
 						}
 						
 					}
@@ -101,7 +109,7 @@
 		function loadGroup(group,groupList){			
 			for(var i = 0; i< group.length; i++){
 				var d=document.createElement('a');
-				jQuery(d).addClass("list-group-item").html('<img src="resources/img/account-icons/mail.png">'+group[i].groupName).appendTo($(groupList));
+				jQuery(d).addClass("list-group-item new-message-received").html('<img src="resources/img/account-icons/mail.png">'+group[i].groupName).appendTo($(groupList));
 				jQuery(d).attr('href','/main-web/chat?currentGroupId='+group[i].groupId);
 			}
 		}
@@ -144,6 +152,17 @@
 					+'<li><a href="#" class="deleteMessage" id="'+newMessage.messageId+'" onclick="deleteMessage('+newMessage.messageId+')"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
 					+'</ul>'						
 					+'</header><div class="message-body"><p>'+newMessage.message+'</p></div>');
+		}
+		
+		/**
+		 * add new group if someone add you to group
+		 * @param newGroup
+		 * @param groupList
+		 */
+		function addNewGroup(newGroup,groupList){
+			var d=document.createElement('a');
+			jQuery(d).addClass("list-group-item new-message-received").html('<img src="resources/img/account-icons/mail.png">'+newGroup.groupName).appendTo($(groupList));
+			jQuery(d).attr('href','/main-web/chat?currentGroupId='+newGroup.groupId);
 		}
 		
 		

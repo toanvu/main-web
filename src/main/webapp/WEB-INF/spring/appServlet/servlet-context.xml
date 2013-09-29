@@ -42,13 +42,13 @@
 	</beans:bean>
 	
 	<beans:bean id="contactController" 
-			class="de.edunet.main.controllers.contact.ContactController">
+			class="de.edunet.main.controllers.contact.ContactController" scope="prototype">
 		<beans:property name="contactHandler" ref="contactService" />
 		<beans:property name="messageHandler" ref="messageService" />
 	</beans:bean>
 
 	<beans:bean id="contactService"
-		class="de.edunet.main.models.contact.ContactHandler">
+		class="de.edunet.main.models.contact.ContactHandler" scope="prototype">
 		<beans:property name="loginBean" ref="loginBean" />
 		<beans:property name="userManager" ref="userManager" />
 		<beans:property name="contactManager" ref="contactManager" />

@@ -81,10 +81,10 @@ public class ContactHandler {
 		return listUsers;
 	}
 
-	public void addCRequest(int userId, String message) {
+	public void addCRequest(int userResponseId,int userRequestId, String message) {
 
-		User userResponse = getUserById(userId);
-		User userRequest = loginBean.getUser();
+		User userResponse = getUserById(userResponseId);
+		User userRequest = getUserById(userRequestId);;
 		CRequest crequest = contactManager.createCRequest(userRequest,
 				userResponse, message);
 		crequest.setCreatedDate(new Date());

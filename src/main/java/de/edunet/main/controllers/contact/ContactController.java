@@ -55,7 +55,7 @@ public class ContactController {
 		logger.info("Calling message modul");
 		if (!model.containsAttribute("allUsers")) {
 			List<User> allUsers = contactHandler.getAllUsers();
-			init(model, allUsers);
+			init(model, allUsers, session);
 		}
 
 		return "contact";
@@ -79,7 +79,7 @@ public class ContactController {
 		logger.info("start search user");
 
 		List<User> users = contactHandler.searchUsers(firstname, lastname);
-		init(model, users);
+		init(model, users, session);
 		logger.info("end search user");
 		return "contact";
 	}
@@ -97,9 +97,9 @@ public class ContactController {
 		logger.info("start add contact request");
 		model.addAttribute("currentUser", messageHandler.getCurrentUser(session));
 
-		contactHandler.addCRequest(Integer.parseInt(userId), message);
+		contactHandler.addCRequest(Integer.parseInt(userId),  messageHandler.getCurrentUser(session).getId(), message);
 		List<User> allUsers = contactHandler.getAllUsers();
-		init(model, allUsers);
+		init(model, allUsers, session);
 		logger.info("end add contact request");
 		return "contact";
 	}
@@ -151,10 +151,10 @@ public class ContactController {
 		return null;
 	}
 
-	public void init(Model model, List<User> users) {
+	public void init(Model model, List<User> users, HttpSession session) {
 
 		for (User user : users) {
-			if (user.getId() == messageHandler.getUserId()) {
+			if (user.getId() == messageHandler.getCurrentUser(session).getId()) {
 				users.remove(user);
 				break;
 			}

@@ -1,0 +1,10 @@
+.userListA .userListB .userListC .userListD .userListE .userListF .userListG .userListH .userListI .userListJ
+         .userListK .userListL .userListM .userListN .userListO .userListP .userListQ .userListR .userListS .userListT
+         .userListU .userListV .userListW .userListX .userListY .userListZ
+	{
+	display: inline
+}
+
+.edunet-context {
+	display: none;
+}

@@ -26,25 +26,31 @@
 
 	<!--  websocket test -->
 
-	<input type="button" value="POST to server..." onclick="post()" />
+<!-- 	<input type="button" value="POST to server..." onclick="post()" /> -->
 
-	<div class="controlPanel">
-		<div id="cp-1" class="cpitem">
-			<img src="/main-web/resources/img/logo.png" />
-		</div>
-	</div>
+<!-- 	<div class="controlPanel"> -->
+<!-- 		<div id="cp-1" class="cpitem"> -->
+<!-- 			<img src="/main-web/resources/img/logo.png" /> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 	<!--  edunet context -->
-     <style>
-     	.edunet-context{ display: none;}
-     </style>
-     <div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
-     <!--  edunet context --> 
+	<style>
+.edunet-context {
+	display: none;
+}
+</style>
+	<div id="edunet-context-userId" class="edunet-context">${currentUser.getId()}</div>
+	<!--  edunet context -->
 
-	<script src="/main-web/resources/js/jquery-1.6.4.min.js"
+	<!-- 	<script src="/main-web/resources/js/jquery-1.6.4.min.js" -->
+	<!-- 		type="text/javascript"></script> -->
+
+
+	<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/main-web/resources/js/2-3/jquery.atmosphere.js"></script>
+	<script src="/main-web/resources/js/jquery.url.js"
 		type="text/javascript"></script>
-<!-- 	<script src="/main-web/resources/js/2-3/jquery.atmosphere.js"></script> -->
-    <script src="/main-web/resources/js/jQuery.atmosphere.js" type="text/javascript" ></script>
-    <script src="/main-web/resources/js/jquery.url.js" type="text/javascript"></script>
 	<script src="/main-web/resources/js/edunet-ws.js"
 		type="text/javascript"></script>
 
@@ -89,17 +95,26 @@
 				<h3>Meine Funktionen</h3>
 			</header>
 			<nav class="hauptmenu">
-			<ul class="nav nav-pills nav-stacked">
-		  			<li class="nav-button">
-		  				<a href="neue-gruppennachricht.html"><img src="resources/img/account-icons/edit.png"> Gruppennachricht schreiben</a>
-		  			</li>
-					<li class="active"><a href=""><img src="resources/img/account-icons/home16.png"> Startseite</a></li>
-					<li><a href="contact"><img src="resources/img/account-icons/user-plus.png"> Neue Kontakte</a></li>
-				    <li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
-				    <li><a href="contactlist"><img src="resources/img/account-icons/address-book.png"> Adressbuch</a></li>
-				    <li><a href="kalender.html"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
-				    <li><a href="setting"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
-	  			</ul>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="nav-button"><a href="neue-gruppennachricht.html"><img
+							src="resources/img/account-icons/edit.png">
+							Gruppennachricht schreiben</a></li>
+					<li class="active"><a href=""><img
+							src="resources/img/account-icons/home16.png"> Startseite</a></li>
+					<li><a href="contact"><img
+							src="resources/img/account-icons/user-plus.png"> Neue
+							Kontakte</a></li>
+					<li><a href="neue-nachrichten.html"><img
+							src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
+					<li><a href="contactlist"><img
+							src="resources/img/account-icons/address-book.png">
+							Adressbuch</a></li>
+					<li><a href="kalender.html"><img
+							src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
+					<li><a href="setting"><img
+							src="resources/img/account-icons/wrench-screwdriver.png">
+							Einstellungen</a></li>
+				</ul>
 			</nav>
 
 			<div class="calendar">
@@ -197,20 +212,6 @@
 					</div>
 					<div class="panel-body">
 						<div class="list-group" id="teacherGroup">
-
-<%-- 							<c:forEach items="${teacherGroup}" var="group"> --%>
-<%-- 								<a href="/main-web/chat/show?groupId=${group.getId()}&userId=0" --%>
-<!-- 									class="list-group-item new-message-received"> <img -->
-<%-- 									src="resources/img/account-icons/mail.png"> <c:if --%>
-<%-- 										test="${group.getMessengers().get(0).getId() == currentUser.getId()}"> --%>
-<%-- 							  	 		${group.getMessengers().get(1).getUsername()} --%>
-<%-- 							  	 </c:if> <c:if --%>
-<%-- 										test="${group.getMessengers().get(0).getId() != currentUser.getId()}"> --%>
-<%-- 							  	 		${group.getMessengers().get(0).getUsername()} --%>
-<%-- 							  	 </c:if> <span class="badge">2</span> --%>
-<!-- 								</a> -->
-<%-- 							</c:forEach> --%>
-
 						</div>
 					</div>
 				</div>
@@ -222,32 +223,8 @@
 						</a>
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
-							<a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">2</span>
-							</a> <a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">1</span>
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a>
+						<div class="list-group" id="parentGroup">
+							
 						</div>
 					</div>
 				</div>
@@ -259,17 +236,8 @@
 						</a>
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
-							<a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">2</span>
-							</a> <a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">1</span>
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a>
+						<div class="list-group" id="otherGroup">
+							
 						</div>
 					</div>
 				</div>
@@ -281,29 +249,8 @@
 						</a>
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
-							<a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">2</span>
-							</a> <a href="#" class="list-group-item new-message-received"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann <span class="badge">1</span>
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="resources/img/account-icons/mail.png"> Franz
-								Mustermann
-							</a>
+						<div class="list-group" id="groups">
+							
 						</div>
 					</div>
 				</div>
@@ -621,9 +568,6 @@
 	</div>
 	<!-- /.modal -->
 
-
-<!-- 	<script -->
-<!-- 		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 	<script>
 		window.jQuery
 				|| document

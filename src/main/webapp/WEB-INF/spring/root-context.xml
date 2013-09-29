@@ -19,7 +19,7 @@
 	</bean>
 
 	<bean id="contactManager" class="org.springframework.jndi.JndiObjectFactoryBean"
-		scope="singleton">
+		scope="prototype">
 		<property name="jndiName" value="java:global/commonejb/ContactManager" />
 	</bean>
 

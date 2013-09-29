@@ -17,13 +17,9 @@
 <meta name="viewport" content="width=1280">
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-<style type="text/css">
-			.edunet-context {
-				display: none;
-			}
-		</style>
 <link rel="stylesheet" href="/main-web/resources/css/bootstrap.css">
 <link rel="stylesheet" href="/main-web/resources/css/screen.css">
+<link rel="stylesheet" href="resources/css/edunet.css">
 <script src="/main-web/resources/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
@@ -54,7 +50,7 @@
 	
 	<script src="/main-web/resources/js/edunet-ws.js"
 		type="text/javascript"></script>
-	
+	<script src="resources/js/edunet.js"></script>
 
 	<!--  websocket test -->
 
@@ -81,23 +77,27 @@
 			<header class="section-header">
 				<h3>Meine Funktionen</h3>
 			</header>
+	
+			
 			<nav class="hauptmenu">
 				<ul class="nav nav-pills nav-stacked">
 					<li class="nav-button"><a href="neue-gruppennachricht.html"><img
-							src="/main-web/resources/img/account-icons/edit.png"> Gruppennachricht
-							schreiben</a></li>
-					<li><a href="index.html"><img
-							src="/main-web/resources/img/account-icons/home16.png"> Startseite</a></li>
-					<li><a href="kontakte-hinzufuegen.html"><img
-							src="/main-web/resources/img/account-icons/user-plus.png"> Neue Kontakte</a></li>
-					<li class="active"><a href="neue-nachrichten.html"><img
-							src="/main-web/resources/img/account-icons/mail.png"> Nachrichten</a></li>
-					<li><a href="kontakte.html"><img
-							src="/main-web/resources/img/account-icons/address-book.png"> Adressbuch</a></li>
+							src="resources/img/account-icons/edit.png">
+							Gruppennachricht schreiben</a></li>
+					<li><a href=""><img
+							src="resources/img/account-icons/home16.png"> Startseite</a></li>
+					<li><a href="contact"><img
+							src="resources/img/account-icons/user-plus.png"> Neue
+							Kontakte</a></li>
+					<li><a class="active" href="neue-nachrichten.html"><img
+							src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
+					<li><a href="contactlist"><img
+							src="resources/img/account-icons/address-book.png">
+							Adressbuch</a></li>
 					<li><a href="kalender.html"><img
-							src="/main-web/resources/img/account-icons/calendar16.png"> Kalender</a></li>
-					<li><a href="einstellungen.html"><img
-							src="/main-web/resources/img/account-icons/wrench-screwdriver.png">
+							src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
+					<li><a href="setting"><img
+							src="resources/img/account-icons/wrench-screwdriver.png">
 							Einstellungen</a></li>
 				</ul>
 			</nav>
@@ -254,24 +254,8 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="list-group">
-							<a href="#" class="list-group-item new-message-received"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann <span
-								class="badge">2</span>
-							</a> <a href="#" class="list-group-item new-message-received"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann <span
-								class="badge">1</span>
-							</a> <a href="#" class="list-group-item"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann
-							</a> <a href="#" class="list-group-item"> <img
-								src="/main-web/resources/img/account-icons/mail.png"> Franz Mustermann
-							</a>
+						<div class="list-group" id="groups">
+							
 						</div>
 					</div>
 				</div>
@@ -629,6 +613,7 @@
 					<h4 class="modal-title">Personen hinzufügen</h4>
 				</div>
 				<div class="modal-description">
+				<!-- TODO: change text -->
 					<p>Nullam quis risus eget urna mollis ornare vel eu leo. Donec
 						ullamcorper nulla non metus auctor fringilla. Vivamus sagittis
 						lacus vel augue laoreet rutrum.
@@ -636,13 +621,13 @@
 				<div class="modal-body">
 					<div class="kontakt-kategorie">
 						<ul>
-							<li><a href="#" class="active"><img
+							<li><a href="#" class="active" onclick="resetCssClass()"><img
 									src="/main-web/resources/img/account-icons/address-book.png"> Alle</a></li>
-							<li><a href="#"><img
+							<li><a href="#" onclick="resetCssClass()"><img
 									src="/main-web/resources/img/account-icons/address-book.png"> Lehrer</a></li>
-							<li><a href="#"><img
+							<li><a href="#" onclick="resetCssClass()"><img
 									src="/main-web/resources/img/account-icons/address-book.png"> Eltern</a></li>
-							<li><a href="#"><img
+							<li><a href="#" onclick="resetCssClass()"><img
 									src="/main-web/resources/img/account-icons/address-book.png"> Sonstige</a></li>
 						</ul>
 					</div>
@@ -650,74 +635,45 @@
 						<div class="kontakt-suchen">
 							<label>Suchen</label> <input type="text">
 						</div>
-						<div class="kontakt-namen">
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
-							<section class="kontakt-item">
-								<img src="/main-web/resources/img/avatar-big.png"> Mustermann Franz
-								<button type="button" class="btn btn-primary">Hinzufügen</button>
-							</section>
+						<div class="kontakt-namen">						
+							<c:forEach items="${allContactUsers}" var="user">
+								<section class="kontakt-item userList${user.getLastname().toUpperCase().charAt(0)}">
+									<img src="/main-web/resources/img/avatar-big.png">
+										${user.getFullName()}
+									<button type="button" class="btn btn-primary" onclick="inviteFriend('${user.getId()}', '${user.getFullName()}')">Hinzufügen</button>
+								</section>
+							</c:forEach>						
 						</div>
 					</div>
 					<aside class="kontakt-alphabet">
 						<ul>
-							<li><a href="#A">A</a></li>
-							<li><a href="#B">B</a></li>
-							<li><a href="#C">C</a></li>
-							<li><a href="#D">D</a></li>
-							<li><a href="#E">E</a></li>
-							<li><a href="#F">F</a></li>
-							<li><a href="#G">G</a></li>
-							<li><a href="#H">H</a></li>
-							<li><a href="#I">I</a></li>
-							<li><a href="#J">J</a></li>
-							<li><a href="#K">K</a></li>
-							<li><a href="#L">L</a></li>
-							<li><a href="#M">M</a></li>
-							<li><a href="#N">N</a></li>
-							<li><a href="#O">O</a></li>
-							<li><a href="#P">P</a></li>
-							<li><a href="#Q">Q</a></li>
-							<li><a href="#R">R</a></li>
-							<li><a href="#S">S</a></li>
-							<li><a href="#T">T</a></li>
-							<li><a href="#U">U</a></li>
-							<li><a href="#V">V</a></li>
-							<li><a href="#W">W</a></li>
-							<li><a href="#X">X</a></li>
-							<li><a href="#Y">Y</a></li>
-							<li><a href="#Z">Z</a></li>
-						</ul>
+				         	<li><a href="#A" onclick="displayUserList('A')">A</a></li>
+				         	<li><a href="#B" onclick="displayUserList('B')">B</a></li>
+				         	<li><a href="#C" onclick="displayUserList('C')">C</a></li>
+				         	<li><a href="#D" onclick="displayUserList('D')">D</a></li>
+				         	<li><a href="#E" onclick="displayUserList('E')">E</a></li>
+				         	<li><a href="#F" onclick="displayUserList('F')">F</a></li>
+				         	<li><a href="#G" onclick="displayUserList('G')">G</a></li>
+				         	<li><a href="#H" onclick="displayUserList('H')">H</a></li>
+				         	<li><a href="#I" onclick="displayUserList('I')">I</a></li>
+				         	<li><a href="#J" onclick="displayUserList('J')">J</a></li>
+				         	<li><a href="#K" onclick="displayUserList('K')">K</a></li>
+				         	<li><a href="#L" onclick="displayUserList('L')">L</a></li>
+				         	<li><a href="#M" onclick="displayUserList('M')">M</a></li>
+				         	<li><a href="#N" onclick="displayUserList('N')">N</a></li>
+				         	<li><a href="#O" onclick="displayUserList('O')">O</a></li>
+				         	<li><a href="#P" onclick="displayUserList('P')">P</a></li>
+				         	<li><a href="#Q" onclick="displayUserList('Q')">Q</a></li>
+				         	<li><a href="#R" onclick="displayUserList('R')">R</a></li>
+				         	<li><a href="#S" onclick="displayUserList('S')">S</a></li>
+				         	<li><a href="#T" onclick="displayUserList('T')">T</a></li>
+				         	<li><a href="#U" onclick="displayUserList('U')">U</a></li>
+				         	<li><a href="#V" onclick="displayUserList('V')">V</a></li>
+				         	<li><a href="#W" onclick="displayUserList('W')">W</a></li>
+				         	<li><a href="#X" onclick="displayUserList('X')">X</a></li>
+				         	<li><a href="#Y" onclick="displayUserList('Y')">Y</a></li>
+				         	<li><a href="#Z" onclick="displayUserList('Z')">Z</a></li>
+			         	</ul>
 					</aside>
 				</div>
 				<div class="modal-footer">

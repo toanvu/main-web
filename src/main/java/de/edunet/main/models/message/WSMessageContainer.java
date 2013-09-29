@@ -15,6 +15,7 @@ public class WSMessageContainer {
 	List<GroupContainer> teacherGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 	List<GroupContainer> parentGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 	List<GroupContainer> otherGroup = new ArrayList<WSMessageContainer.GroupContainer>();
+	List<GroupContainer> basicGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 
 	public WSMessageContainer(String currentUser) {
 		this.currentUser = currentUser;
@@ -71,6 +72,20 @@ public class WSMessageContainer {
 	public void createOtherGroup(List<EGroup> groups) {
 		createGroupList(otherGroup, groups);
 	}
+	
+	public void createBasicGroup(List<EGroup> g) {
+		createGroupList(basicGroup, g);
+	}
+	
+	
+
+	public List<GroupContainer> getGroups() {
+		return basicGroup;
+	}
+
+	public void setGroups(List<GroupContainer> groups) {
+		this.basicGroup = groups;
+	}
 
 	private void createGroupList(List<GroupContainer> groupList,
 			List<EGroup> groups) {
@@ -93,9 +108,10 @@ public class WSMessageContainer {
 		return sb.toString().substring(1);
 	}
 
-	private static class GroupContainer {
+	public static class GroupContainer {
 		String groupName;
 		int groupId;
+		boolean newGroup = false;
 
 		public GroupContainer(String groupName, int groupId) {
 			this.setGroupId(groupId);
@@ -117,6 +133,20 @@ public class WSMessageContainer {
 		public void setGroupId(int groupId) {
 			this.groupId = groupId;
 		}
+
+		public boolean isNewGroup() {
+			return newGroup;
+		}
+
+		public void setNewGroup(boolean newGroup) {
+			this.newGroup = newGroup;
+		}
+
+		public int getGroupId() {
+			return groupId;
+		}
+		
+		
 
 	}
 

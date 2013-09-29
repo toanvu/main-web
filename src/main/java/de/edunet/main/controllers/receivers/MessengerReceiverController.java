@@ -2,22 +2,17 @@ package de.edunet.main.controllers.receivers;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.PathParam;
 
 import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereRequest;
 import org.atmosphere.cpr.AtmosphereResource;
-import org.atmosphere.cpr.AtmosphereResourceFactory;
 import org.atmosphere.cpr.AtmosphereResponse;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
@@ -30,22 +25,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.tags.ParamAware;
 
 import com.google.gson.Gson;
 
+import de.edunet.main.models.contact.ContactHandler;
 import de.edunet.main.models.message.MessageHandler;
 import de.edunet.main.models.message.WSMessageContainer;
+import de.edunet24.contact.entityBeans.CRequest;
 import de.edunet24.dev.utils.common.EUtils;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.usermanager.entityBeans.User;
+import de.edunet24.usermanager.entityImp.IESession;
 
 /**
  * Handles requests for the application home page.
@@ -58,7 +52,8 @@ public class MessengerReceiverController  {
 
 	private Gson gson = new Gson();
 
-	private final MessageHandler messageHanlder;
+	private final MessageHandler messageHandler;
+	private final ContactHandler contactHandler;
 
 	/**
 	 * A BroadcasterFactory (injected as a singleton) that enables client code
@@ -75,25 +70,55 @@ public class MessengerReceiverController  {
 	 */
 	@Autowired
 	public MessengerReceiverController(BroadcasterFactory bf,
-			MessageHandler messageHandler) {
-		this.messageHanlder = messageHandler;
+			MessageHandler messageHandler, ContactHandler contactHandler) {
+		this.messageHandler = messageHandler;
+		this.contactHandler = contactHandler;
 		this.bf = bf;
 	}
 	
 	@RequestMapping(value = "/chat")
-	public String chat(Locale locale, Model model,HttpSession session, @RequestParam(value="currentGroupId") int currentGroupId){
-		EGroup currentGroup = messageHanlder.getMessageBean().getGroup(currentGroupId);
-		model.addAttribute("currentUser",messageHanlder.getCurrentUser(session));
+	public String chat(Locale locale, Model model,HttpSession session, @RequestParam(value="currentGroupId" , required = false) int currentGroupId,
+			 @RequestParam(value="userId" , required = false) Integer userId
+			){
+		if(userId != null){
+			currentGroupId = messageHandler.createNewGroup(userId, session);
+		}
+		EGroup currentGroup = messageHandler.getMessageBean().getGroup(currentGroupId);
+		model.addAttribute("currentUser",messageHandler.getCurrentUser(session));
 		model.addAttribute("currentGroup", currentGroup);
-		model.addAttribute("toChannels",EUtils.buildChannels(messageHanlder.getMessageBean().getMessengerOfGroup(currentGroupId)));
+		model.addAttribute("toChannels",EUtils.buildChannels(messageHandler.getMessageBean().getMessengerOfGroup(currentGroupId)));
+		
+		getOnlineContactsUser (model, session);
+		
 		return "chat";
+	}
+	
+	public void getOnlineContactsUser(Model model, HttpSession session){
+		List<CRequest> allCRequestsUserResponse = contactHandler.getRequestByUserResponse();
+
+		model.addAttribute("allCRequestsUserResponse", allCRequestsUserResponse);
+		
+		List<User> tmpUsers = contactHandler.getContactUsers(contactHandler.getAllContact(),
+				messageHandler.getCurrentUser(session));
+		
+		IESession sessionBean = messageHandler.getSessionBean();
+		List<User> users = new ArrayList<User>();
+		for (User user : tmpUsers) {
+			logger.info("add user chat "+user.getFullName());
+			if(sessionBean.getContext(user.getId()) != null){
+				logger.info("add user chat add "+user.getFullName());
+				users.add(user);
+			}
+		}
+		
+		model.addAttribute("allContactUsers",users);
 	}
 	
 	@RequestMapping(value = "/services/message/delete")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void restMessage(Locale locale, Model model,HttpSession session, @RequestParam(value="id") int messageId){
 		//TODO : sicherheit prüfen
-		messageHanlder.deleteMessage(messageId, messageHanlder.getCurrentUser(session).getId());
+		messageHandler.deleteMessage(messageId, messageHandler.getCurrentUser(session).getId());
 	}
 	
 	
@@ -155,23 +180,25 @@ public class MessengerReceiverController  {
 			// get parameter from request url
 			Map<String, String> parameters = EUtils.getQueryMap(listenUrl);
 			String toTransferMessage ="";
-			WSMessageContainer messageContainer = new WSMessageContainer(messageHanlder.getCurrentUser(session).getUsername());
+			WSMessageContainer messageContainer = new WSMessageContainer(messageHandler.getCurrentUser(session).getUsername());
 			
 			if (currentGroupId != null) {
 				
 				
 //				//create fake message
-//				messageHanlder.send(4, "say something 1", session);
+//				messageHandler.send(4, "say something 1", session);
 				
-				messageContainer.createMessageList(messageHanlder
+				messageContainer.createMessageList(messageHandler
 						.getMessageOfCurrentGroup(Integer.valueOf(currentGroupId),session));	
 				
 			}			
 			
 			//getAll groups
-			messageContainer.createTeacherGroup(messageHanlder.getTeacherGroup(session));
-			messageContainer.createParentGroup(messageHanlder.getParentGroup(session));
-			messageContainer.createOtherGroup(messageHanlder.getOtherGroup(session));
+			messageContainer.createTeacherGroup(messageHandler.getTeacherGroup(session));
+			messageContainer.createParentGroup(messageHandler.getParentGroup(session));
+			messageContainer.createOtherGroup(messageHandler.getOtherGroup(session));
+			messageContainer.createBasicGroup(messageHandler.getBasicGroup(session));
+			
 			
 			//transform to json
 			toTransferMessage = gson.toJson(messageContainer);	
@@ -234,7 +261,7 @@ public class MessengerReceiverController  {
 			Map<String, String> parameters = EUtils.getQueryMap(postedUrl);
 			
 			if(parameters.get("authorId") !=  null && parameters.get("currentGroupId") != null && parameters.get("message") !=  null && parameters.get("toChannels") != null){
-				int messageId = messageHanlder.send(Integer.valueOf(parameters.get("currentGroupId")), parameters.get("message"), session);
+				int messageId = messageHandler.send(Integer.valueOf(parameters.get("currentGroupId")), parameters.get("message"), session);
 				for(String receiver : parameters.get("toChannels").split(",")){
 					Broadcaster bcReceiver = this.bf.lookup("bc_"+receiver);					
 					if(bcReceiver != null){
@@ -243,6 +270,30 @@ public class MessengerReceiverController  {
 						bcReceiver.broadcast(gson.toJson(messageContainer));
 					}
 				}
+			}
+			
+			System.out.println("invite frend : "+ parameters.get("inviteFriend"));
+			//invite friend
+			if(parameters.get("action") != null && parameters.get("action").equalsIgnoreCase("inviteFriend")){
+				Integer userId = Integer.valueOf(parameters.get("userid"));
+				Integer currentGroupIdInvite = Integer.valueOf(parameters.get("currentGroupId"));
+				User user = messageHandler.getUserManager().getUser(userId);
+				EGroup group =messageHandler.getMessageBean().getGroup(currentGroupIdInvite);
+				//add user to group
+				if(group.getMessengers().size() > 2){
+					messageHandler.getMessageBean().invite(user,group);
+				}
+				if(group.getMessengers().size() == 2){
+					EGroup newGroup = messageHandler.getMessageBean().getGroup(messageHandler.createNewGroup(userId, session));					
+					messageHandler.getMessageBean().invite(group.getMessengers(), newGroup);
+				}
+				
+				Broadcaster groupActivator = this.bf.lookup("bc_"+userId);
+				WSMessageContainer.GroupContainer groupContainer = new WSMessageContainer.GroupContainer(group.getGroupName(), group.getId());
+				groupContainer.setNewGroup(true);
+				//broadcaster to client
+				groupActivator.broadcast(gson.toJson(groupContainer));
+				System.out.println("invite frend : "+userId+ " and groupid: "+currentGroupIdInvite);
 			}
 			
 		}

@@ -18,41 +18,10 @@
 
         <link rel="stylesheet" href="resources/css/bootstrap.css">
         <link rel="stylesheet" href="resources/css/screen.css">
+        <link rel="stylesheet" href="resources/css/edunet.css">
         <script src="resources/js/vendor/modernizr-2.6.2.min.js"></script>
-        <script type="text/javascript">
-
-        	var alphabet = new Array( "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-   	        		 "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
+        <script src="resources/js/edunet.js"></script>
         
-			function addContact(name, id){
-				document.getElementById("userResponseName").innerHTML = name;
-				document.getElementById("userResponseId").value = id;
-			}
-
-			function displayUserList(val){
-				for(var i= 0; i < alphabet.length ; i++ ){
-					if(alphabet[i] == val){
-						jQuery(".userList"+val).css("display", "inline");
-					}
-					else{
-						jQuery(".userList"+alphabet[i]).css("display", "none");
-					}
-				}
-			}
-
-			function resetCssClass(){
-				for(var i= 0; i < alphabet.length ; i++ ){	
-					jQuery(".userList"+alphabet[i]).css("display", "inline");
-				}
-			}
-        </script>
-        <style type="text/css">
-         .userListA .userListB .userListC .userListD .userListE .userListF .userListG .userListH .userListI .userListJ
-         .userListK .userListL .userListM .userListN .userListO .userListP .userListQ .userListR .userListS .userListT
-         .userListU .userListV .userListW .userListX .userListY .userListZ {
-         	display:inline
-         }
-        </style>
     </head>
     <body>
 

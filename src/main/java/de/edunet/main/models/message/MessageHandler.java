@@ -28,7 +28,7 @@ public class MessageHandler {
 	private  IMessage messageBean;
 	
 	private IESession sessionBean;
-	
+
 	private	Map<Integer,GroupsByRole> groupsByRoles ;
 	
 	private static final Logger logger = LoggerFactory
@@ -43,7 +43,7 @@ public class MessageHandler {
 	}	
 
 	/**
-	 * 
+	 * create or get group from userid
 	 * @param userId
 	 * @return groupid
 	 */
@@ -108,6 +108,10 @@ public class MessageHandler {
 		return getGroupByRoles(session).get(3).getValue();
 	}
 	
+	public List<EGroup> getBasicGroup(HttpSession session) {
+		return getGroupByRoles(session).get(4).getValue();
+	}
+
 	/**
 	 * 
 	 * @param session
@@ -175,7 +179,11 @@ public class MessageHandler {
 	public void setGroupsByRoles(Map<Integer, GroupsByRole> groupsByRoles) {
 		this.groupsByRoles = groupsByRoles;
 	}
-
+	
+	public IESession getSessionBean() {
+		return sessionBean;
+	}
+	
 	public void setSessionBean(IESession sessionBean) {
 		this.sessionBean = sessionBean;
 	}
