@@ -53,6 +53,10 @@ public class MessageHandler {
 
 	}
 	
+	public boolean deleteMessage(int messageId,int userId){
+		return messageBean.delete(messageId,userId);
+	}
+	
 	
 
 	public List<Message> getMessageOfCurrentGroup(int groupId, HttpSession session) {			
@@ -62,11 +66,12 @@ public class MessageHandler {
 		return messageByGroup;
 	}
 
-	public void send(int groupId, String text, HttpSession session) {
+	public Integer send(int groupId, String text, HttpSession session) {
 		if(groupId>0){
 			// update current group for MessageBean				
-			logger.debug("send message ok :" + messageBean.sendMessage(text,messageBean.getGroup(groupId),getCurrentUser(session)));
+			return messageBean.sendMessage(text,messageBean.getGroup(groupId),getCurrentUser(session));
 		}
+		return 0;
 	}
 	
 	public int getUserId(){

@@ -40,15 +40,21 @@
 	<div id="edunet-context-toChannels" class="edunet-context">${toChannels}</div>
 	<!--  edunet context -->
 
-	<script src="/main-web/resources/js/jquery-1.6.4.min.js"
-		type="text/javascript"></script>
-	<script src="/main-web/resources/js/jQuery.atmosphere.js"
-		type="text/javascript"></script>
+<!-- 	<script src="/main-web/resources/js/jquery-1.6.4.min.js" -->
+<!-- 		type="text/javascript"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+			<script src="/main-web/resources/js/2-3/jquery.atmosphere.js" type="text/javascript"></script>
+<!-- 	<script src="/main-web/resources/js/jQuery.atmosphere.js" -->
+<!-- 		type="text/javascript"></script> -->
 	<script src="/main-web/resources/js/jquery.url.js"
 		type="text/javascript"></script>
+	
+	<script src="/main-web/resources/js/message.js"
+		type="text/javascript"></script>
+	
 	<script src="/main-web/resources/js/edunet-ws.js"
 		type="text/javascript"></script>
-
+	
 
 	<!--  websocket test -->
 
@@ -290,7 +296,7 @@
 					<ul class="dropdown-menu" role="menu">
 						<li><a data-toggle="modal" href="#Unterhaltung-verlassen"><i
 								class="icon-signout"></i> Unterhaltung verlassen</a></li>
-						<li><a data-toggle="modal" href="#Unterhaltung-loeschen"><i
+						<li><a data-toggle="modal" href="#Unterhaltung-loeschen" id="deleteMessage"><i
 								class="icon-trash"></i> Unterhaltung löschen</a></li>
 					</ul>
 				</div>

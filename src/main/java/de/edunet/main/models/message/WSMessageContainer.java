@@ -56,7 +56,7 @@ public class WSMessageContainer {
 		for (Message message : messages) {
 			messageOfGroup.add(new MessageContainer(message.getText(), message
 					.getCreatedDate(), message.getOwner().getId(), message
-					.getOwner().getUsername(), message.getGroup().getId()));
+					.getOwner().getUsername(), message.getGroup().getId(),message.getId()));
 		}
 	}
 
@@ -121,6 +121,7 @@ public class WSMessageContainer {
 	}
 
 	public static class MessageContainer {
+		int messageId;
 		String message;
 		Date sendDate;
 		int ownerId;
@@ -129,15 +130,31 @@ public class WSMessageContainer {
 		boolean newMessage = false;
 
 		public MessageContainer(String message, Date sendDate, int ownerId,
-				String ownerName,int groupId) {
+				String ownerName,int groupId,int messageId) {
 			this.setMessage(message);
 			this.setOwnerId(ownerId);
 			this.setOwnerName(ownerName);
 			this.setSendDate(sendDate);
 			this.setGroupId(groupId);
+			this.setMessageId(messageId);
 		}
 		
 		
+		
+
+		public int getMessageId() {
+			return messageId;
+		}
+
+
+
+
+		public void setMessageId(int messageId) {
+			this.messageId = messageId;
+		}
+
+
+
 
 		public boolean isNewMessage() {
 			return newMessage;

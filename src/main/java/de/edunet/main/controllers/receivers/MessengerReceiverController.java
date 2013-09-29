@@ -27,6 +27,7 @@ import org.atmosphere.websocket.WebSocketEventListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.tags.ParamAware;
 
 import com.google.gson.Gson;
@@ -43,6 +45,7 @@ import de.edunet.main.models.message.MessageHandler;
 import de.edunet.main.models.message.WSMessageContainer;
 import de.edunet24.dev.utils.common.EUtils;
 import de.edunet24.message.entityBeans.EGroup;
+import de.edunet24.usermanager.entityBeans.User;
 
 /**
  * Handles requests for the application home page.
@@ -85,6 +88,15 @@ public class MessengerReceiverController  {
 		model.addAttribute("toChannels",EUtils.buildChannels(messageHanlder.getMessageBean().getMessengerOfGroup(currentGroupId)));
 		return "chat";
 	}
+	
+	@RequestMapping(value = "/services/message/delete")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void restMessage(Locale locale, Model model,HttpSession session, @RequestParam(value="id") int messageId){
+		//TODO : sicherheit prüfen
+		messageHanlder.deleteMessage(messageId, messageHanlder.getCurrentUser(session).getId());
+	}
+	
+	
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -222,11 +234,11 @@ public class MessengerReceiverController  {
 			Map<String, String> parameters = EUtils.getQueryMap(postedUrl);
 			
 			if(parameters.get("authorId") !=  null && parameters.get("currentGroupId") != null && parameters.get("message") !=  null && parameters.get("toChannels") != null){
-				messageHanlder.send(Integer.valueOf(parameters.get("currentGroupId")), parameters.get("message"), session);
+				int messageId = messageHanlder.send(Integer.valueOf(parameters.get("currentGroupId")), parameters.get("message"), session);
 				for(String receiver : parameters.get("toChannels").split(",")){
 					Broadcaster bcReceiver = this.bf.lookup("bc_"+receiver);					
 					if(bcReceiver != null){
-						WSMessageContainer.MessageContainer messageContainer = new WSMessageContainer.MessageContainer((String)parameters.get("message"), new Date(),Integer.valueOf(parameters.get("authorId")),(String) parameters.get("authorName"),Integer.valueOf(parameters.get("currentGroupId")));						
+						WSMessageContainer.MessageContainer messageContainer = new WSMessageContainer.MessageContainer((String)parameters.get("message"), new Date(),Integer.valueOf(parameters.get("authorId")),(String) parameters.get("authorName"),Integer.valueOf(parameters.get("currentGroupId")),messageId);						
 						messageContainer.setNewMessage(true);
 						bcReceiver.broadcast(gson.toJson(messageContainer));
 					}

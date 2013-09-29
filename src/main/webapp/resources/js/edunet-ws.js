@@ -109,6 +109,7 @@
 		function loadMessage(messages){
 			for(var i = 0; i< messages.length; i++){
 				var messageItem=document.createElement('div');
+				jQuery(messageItem).attr("id","msg_"+messages[i].messageId);
 				jQuery(messageItem).addClass("message-item").insertBefore($("#chatInput"));
 				var row = document.createElement('div');
 				jQuery(row).addClass("row").appendTo(messageItem);
@@ -120,14 +121,15 @@
 						+'<ul class="pull-right">'
 						+'<li><a href="#"><img src="/main-web/resources/img/account-icons/translate16.png"> Nachricht übersetzen</a></li>'
 						+'<li><a href="#"><img src="/main-web/resources/img/account-icons/mail-forward.png"> Weiterleiten</a></li>'
-						+'<li><a href="#"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
+						+'<li><a href="#" class="deleteMessage" id="'+messages[i].messageId+'" onclick="deleteMessage('+messages[i].messageId+')"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
 						+'</ul>'						
 						+'</header><div class="message-body"><p>'+messages[i].message+'</p></div>');
 			}
 		}
 		
 		function addNewMessage(newMessage){
-			var messageItem=document.createElement('div');
+			var messageItem=document.createElement('div');		
+			jQuery(messageItem).attr("id","msg_"+newMessage.messageId);
 			jQuery(messageItem).addClass("message-item").insertBefore($("#chatInput"));
 			var row = document.createElement('div');
 			jQuery(row).addClass("row").appendTo(messageItem);
@@ -139,7 +141,7 @@
 					+'<ul class="pull-right">'
 					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/translate16.png"> Nachricht übersetzen</a></li>'
 					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/mail-forward.png"> Weiterleiten</a></li>'
-					+'<li><a href="#"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
+					+'<li><a href="#" class="deleteMessage" id="'+newMessage.messageId+'" onclick="deleteMessage('+newMessage.messageId+')"><img src="/main-web/resources/img/account-icons/bin.png"> Löschen</a></li>'
 					+'</ul>'						
 					+'</header><div class="message-body"><p>'+newMessage.message+'</p></div>');
 		}
