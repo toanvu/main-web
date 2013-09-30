@@ -573,10 +573,11 @@ body {
 
 /* ////////////////////////// Neue Nachrichten */
 .neue-nachrichten .content {
-  padding: 40px 0 100px;
-  height: 100%;
+  padding: 0 25px 0 0;
+  height: 300px;
   overflow-y: scroll;
   position: absolute;
+  top: 40px;
 }
 
 .nachrichten-header {
@@ -3789,6 +3790,18 @@ a .icon-flip-vertical:before {
   }
   .kontakt-hinzufuegen-alphabet ul li a {
     height: 13px;
+  }
+
+  .kontakt-namen {
+    max-height: 338px;
+  }
+
+  .neue-nachrichten .content {
+    padding: 0 0 50px;
+    height: 300px;
+    overflow-y: scroll;
+    position: absolute;
+    top: 120px;
   }
 }
 

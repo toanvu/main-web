@@ -286,7 +286,8 @@
 				</div>
 			</header>
 
-			<div class="content" id="chatContent">
+			<div class="content calc-width" id="chatContent">
+			
 		</div>
 				<footer class="message-write-footer calc-width" id="chatInput">
 					<div class="message-toolbar">
@@ -828,10 +829,6 @@
 	<!-- /.modal -->
 
 
-
-
-
-	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="/main-web/resources/js/vendor/bootstrap.min.js"></script>
 	<script src="/main-web/resources/js/neu-2013.min.js"></script>
 </body>

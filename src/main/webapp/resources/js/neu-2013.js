@@ -1,6 +1,7 @@
 //Initial load of page
 $(document).ready(sizeContent);
 
+
 //Every resize of window
 $(window).resize(sizeContent);
 
@@ -9,18 +10,16 @@ function sizeContent() {
     var newHeight = $("html").height() - $("#head-bar").height() + "px";
     var newHeight2 = $("html").height() - $("#head-bar").height() - $(".section-header").height() - $(".contact-tabs").height() - $(".meta-footer").height() + "px";
     var newHeight3 = $("html").height() - $("#head-bar").height() - $(".section-header").height() - $(".contact-tabs").height() - $(".new-contacts-header").height() - $(".meta-footer").height() + "px";
+     var newHeight4 = $("html").height() - $("#head-bar").height() - $(".nachrichten-header").outerHeight() - $(".message-write-footer").outerHeight() + $(".meta-footer").height() + "px";
     var newWidth = $("body").width() - $(".meine-funktionen").width() - $(".alle-unterhaltungen").width() + "px";
     var newWidth2 = $("body").width() - $(".meine-funktionen").width() - $(".alle-unterhaltungen").width() - $(".contact-list-wrapper").width() - $(".kontakte-alphabet").width() + "px";
     $(".wrapper").css("height", newHeight);
     $(".wrapper-2").css("height", newHeight2);
+    $("#chatContent").css("height", newHeight4);
     $(".wrapper-3").css("height", newHeight3);
     $(".calc-width").css("width", newWidth);
     $(".calc-width-2").css("width", newWidth2);
 }
-
-
-
-
 
 
 $(document).ready(function() {
@@ -112,7 +111,8 @@ $(document).ready(function() {
 		files.toggleClass("hide");
 	});
 
-
+	var Einstellungsnav = $("#Einstellungsnav a:first");
+	Einstellungsnav.tab('show');
 
 	var tooltips = $(".tooltip-toggle");
 	tooltips.tooltip();

@@ -118,7 +118,7 @@
 			for(var i = 0; i< messages.length; i++){
 				var messageItem=document.createElement('div');
 				jQuery(messageItem).attr("id","msg_"+messages[i].messageId);
-				jQuery(messageItem).addClass("message-item").insertBefore($("#chatInput"));
+				jQuery(messageItem).addClass("message-item").appendTo($("#chatContent"));
 				var row = document.createElement('div');
 				jQuery(row).addClass("row").appendTo(messageItem);
 				var avaDiv = document.createElement('div');
@@ -138,7 +138,7 @@
 		function addNewMessage(newMessage){
 			var messageItem=document.createElement('div');		
 			jQuery(messageItem).attr("id","msg_"+newMessage.messageId);
-			jQuery(messageItem).addClass("message-item").insertBefore($("#chatInput"));
+			jQuery(messageItem).addClass("message-item").appendTo($("#chatContent"));
 			var row = document.createElement('div');
 			jQuery(row).addClass("row").appendTo(messageItem);
 			var avaDiv = document.createElement('div');
