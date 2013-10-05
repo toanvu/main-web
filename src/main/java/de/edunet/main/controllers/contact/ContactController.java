@@ -128,6 +128,33 @@ public class ContactController {
 						messageHandler.getCurrentUser(session)));
 		return "contactlist";
 	}
+	
+	
+	@RequestMapping(value = "/api/contactlist", method = RequestMethod.GET)
+	public String contactListApi(Model model, HttpSession session) {
+		model.addAttribute("currentUser", messageHandler.getCurrentUser(session));
+
+		if (!messageHandler.isBridgeSessionOk(session)) {
+			return "redirect:../home-web";
+		}
+
+		List<CRequest> allCRequestsUserResponse = contactHandler.getRequestByUserResponse();
+
+		logger.info("all requests: " + allCRequestsUserResponse);
+		logger.info("all requests size: " + allCRequestsUserResponse.size());
+
+		model.addAttribute("allCRequestsUserResponse", allCRequestsUserResponse);
+		
+		logger.info(" all contacts: "+contactHandler.getAllContact());
+		logger.info(" allContactUsers: "+contactHandler.getContactUsers(contactHandler.getAllContact(),
+				messageHandler.getCurrentUser(session)));
+		
+		model.addAttribute("allContactUsers",
+				contactHandler.getContactUsers(contactHandler.getAllContact(),
+						messageHandler.getCurrentUser(session)));
+		return "contactlistBox";
+	}
+	
 
 	@RequestMapping(value = "/contactlist/replycrequest", method = RequestMethod.GET)
 	public String replyCRequest(
