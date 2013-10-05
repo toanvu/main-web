@@ -6,7 +6,7 @@
 	<artifactId>main</artifactId>
 	<name>main-web</name>
 	<packaging>war</packaging>
-	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
@@ -183,6 +183,7 @@
 		     <artifactId>edunet-utils</artifactId>
   			 <version>1.0.1-SNAPSHOT</version>
 		 </dependency>
+	
 	</dependencies>
 	<repositories>
 	    <repository>
