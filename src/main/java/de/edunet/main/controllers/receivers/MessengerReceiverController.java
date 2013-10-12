@@ -37,7 +37,9 @@ import de.edunet.main.models.message.MessageHandler;
 import de.edunet.main.models.message.WSMessageContainer;
 import de.edunet24.contact.entityBeans.CRequest;
 import de.edunet24.dev.utils.common.EUtils;
+import de.edunet24.dev.utils.dataContainers.NotificationContainer;
 import de.edunet24.message.entityBeans.EGroup;
+import de.edunet24.notification.entityBeans.UserNotification;
 import de.edunet24.usermanager.entityBeans.User;
 import de.edunet24.usermanager.entityImp.IESession;
 
@@ -247,6 +249,8 @@ public class MessengerReceiverController  {
 			
 		}
 		
+		
+		
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
@@ -268,6 +272,19 @@ public class MessengerReceiverController  {
 						WSMessageContainer.MessageContainer messageContainer = new WSMessageContainer.MessageContainer((String)parameters.get("message"), new Date(),Integer.valueOf(parameters.get("authorId")),(String) parameters.get("authorName"),Integer.valueOf(parameters.get("currentGroupId")),messageId);						
 						messageContainer.setNewMessage(true);
 						bcReceiver.broadcast(gson.toJson(messageContainer));
+						//test notification container
+						
+						messageHandler.getNotificationBean().updateNotification(Integer.valueOf(receiver), "newMessage",  String.valueOf(messageId));
+						for(UserNotification un : messageHandler.getNotificationBean().getNotification(Integer.valueOf(receiver))){
+							if(un.getNotificationType().getName().equals("newMessage")){
+								NotificationContainer newMessageNotifcationContainer = new NotificationContainer();
+								newMessageNotifcationContainer.setName(un.getNotificationType().getName());
+								newMessageNotifcationContainer.setNumber(un.getNumberOfNotification());
+								newMessageNotifcationContainer.setValue(un.getValue());
+								bcReceiver.broadcast(gson.toJson(newMessageNotifcationContainer));
+								break;
+							}							
+						}
 					}
 				}
 			}

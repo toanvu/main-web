@@ -12,6 +12,7 @@ import de.edunet24.common.GroupsByRole;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
 import de.edunet24.message.entityInterfaces.IMessage;
+import de.edunet24.notification.Interfaces.IUserNotification;
 import de.edunet24.usermanager.entityBeans.EContext;
 import de.edunet24.usermanager.entityBeans.Role;
 import de.edunet24.usermanager.entityBeans.User;
@@ -28,6 +29,8 @@ public class MessageHandler {
 	private  IMessage messageBean;
 	
 	private IESession sessionBean;
+	
+	private IUserNotification notificationBean;
 
 	private	Map<Integer,GroupsByRole> groupsByRoles ;
 	
@@ -128,7 +131,7 @@ public class MessageHandler {
 					User loggingUser = userManager.getUser(userIdFromHome);
 //					Role role = userManager.getRole(userIdFromHome).get(0);
 					
-					sessionBean.saveContext(sessionBean.createEContext(loggingUser,loggingUser.getUsertype(),"de"));
+					sessionBean.saveContext(sessionBean.createEContext(loggingUser,loggingUser.getUsertype(),"de",notificationBean.getNotification(userIdFromHome)));
 					session.setAttribute("currentUserId", userIdFromHome);
 					return true;
 				}else{
@@ -192,7 +195,15 @@ public class MessageHandler {
 		sessionBean.removeUser((Integer) session.getAttribute("currentUserId"));
 		session.setAttribute("currentUserId", null);
 	}
-	
-	
 
+	public IUserNotification getNotificationBean() {
+		return notificationBean;
+	}
+
+	public void setNotificationBean(IUserNotification notificationBean) {
+		this.notificationBean = notificationBean;
+	}
+	
+	
+	
 }

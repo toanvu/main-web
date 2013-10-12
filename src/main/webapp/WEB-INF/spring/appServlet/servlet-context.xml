@@ -39,6 +39,7 @@
 		<beans:property name="userManager" ref="userManager" />
 		<beans:property name="messageBean" ref="messageBean" />		
 		<beans:property name="sessionBean" ref="sessionBean" />
+		<beans:property name="notificationBean" ref="notificationBean" />
 	</beans:bean>
 	
 	<beans:bean id="contactController" 

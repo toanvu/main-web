@@ -27,6 +27,10 @@
 		scope="singleton">
 		<property name="jndiName" value="java:global/commonejb/ESessionBean" />
 	</bean>
+	
+	<bean id="notificationBean" class="org.springframework.jndi.JndiObjectFactoryBean" scope="prototype">
+		<property name="jndiName" value="java:global/commonejb/NotificationBean" />
+	</bean>
 	<!-- End definition of EJBs -->
 
 

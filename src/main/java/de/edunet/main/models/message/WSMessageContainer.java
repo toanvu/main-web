@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.edunet24.dev.utils.dataContainers.NotificationContainer;
 import de.edunet24.message.entityBeans.EGroup;
 import de.edunet24.message.entityBeans.Message;
 import de.edunet24.usermanager.entityBeans.User;
@@ -11,6 +12,9 @@ import de.edunet24.usermanager.entityBeans.User;
 public class WSMessageContainer {
 
 	private String currentUser ;
+	
+	List<NotificationContainer> notifications = new ArrayList<NotificationContainer>();
+	
 	List<MessageContainer> messageOfGroup = new ArrayList<WSMessageContainer.MessageContainer>();
 	List<GroupContainer> teacherGroup = new ArrayList<WSMessageContainer.GroupContainer>();
 	List<GroupContainer> parentGroup = new ArrayList<WSMessageContainer.GroupContainer>();
@@ -51,6 +55,15 @@ public class WSMessageContainer {
 
 	public void setOtherGroup(List<GroupContainer> otherGroup) {
 		this.otherGroup = otherGroup;
+	}
+	
+
+	public List<NotificationContainer> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<NotificationContainer> notifications) {
+		this.notifications = notifications;
 	}
 
 	public void createMessageList(List<Message> messages) {
@@ -241,6 +254,5 @@ public class WSMessageContainer {
 		public void setOwnerName(String ownerName) {
 			this.ownerName = ownerName;
 		}
-
 	}
 }
