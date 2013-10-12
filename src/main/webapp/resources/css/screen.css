@@ -573,7 +573,7 @@ body {
 
 /* ////////////////////////// Neue Nachrichten */
 .neue-nachrichten .content {
-  padding: 0 25px 0 0;
+  padding: 0 0 0;
   height: 300px;
   overflow-y: scroll;
   position: absolute;

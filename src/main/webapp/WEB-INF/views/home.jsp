@@ -109,7 +109,7 @@
 					<li><a href="contactlist"><img
 							src="resources/img/account-icons/address-book.png">
 							Adressbuch</a></li>
-					<li><a href="kalender.html"><img
+					<li><a href="calendar"><img
 							src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
 					<li><a href="setting"><img
 							src="resources/img/account-icons/wrench-screwdriver.png">

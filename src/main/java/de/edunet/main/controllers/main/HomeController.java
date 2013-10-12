@@ -58,12 +58,18 @@ public class HomeController {
 			calendarAPI.setRootUrl("http://localhost:8080/restapi/calendar/search");
 
 			System.out.println("AppointmentContainer and notice of response from search appointment with ownerId = 1 ---"
-					+ calendarAPI.parseObject().getNotice());
+					+ calendarAPI.parseObject().getEntries().get(0).getNotice());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "home";
+	}
+
+	@RequestMapping(value = "/calendar", method = RequestMethod.GET)
+	public String calendar(HttpSession session) {
+
+		return "calendar";
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
