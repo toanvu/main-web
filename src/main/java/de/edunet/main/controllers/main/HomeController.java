@@ -1,5 +1,6 @@
 package de.edunet.main.controllers.main;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -12,10 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import de.edunet.main.models.contact.ContactHandler;
 import de.edunet.main.models.message.MessageHandler;
+import de.edunet24.calendar.entityInterface.IAppointment;
 import de.edunet24.dev.utils.api.CalendarAPI;
+import de.edunet24.dev.utils.http.EResponse;
 
 /**
  * Handles requests for the application home page.
@@ -27,6 +31,7 @@ public class HomeController {
 
 	private MessageHandler messageHandler;
 	private ContactHandler contactHandler;
+	private IAppointment appointmentBean;
 
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
@@ -66,8 +71,21 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/calendar", method = RequestMethod.GET)
-	public String calendar(HttpSession session) {
+	@RequestMapping(value = "/calendar")
+	public String calendar(@RequestParam(required = false) String ownerId, @RequestParam(required = false) String date,
+			@RequestParam(required = false) String title, @RequestParam(required = false) String notice, @RequestParam(required = false) String share,
+			@RequestParam(required = false) String owner) throws Exception {
+
+		Map<String, String> calendarKeys = new HashMap<String, String>();
+		calendarKeys.put("ownerId", "1");
+		CalendarAPI calendarAPI = new CalendarAPI("", calendarKeys);
+		calendarAPI.setRootUrl("http://localhost:8080/restapi/calendar");
+
+		if (date != null && title != null) {
+			// appointmentBean.add(notice, owner, ownerId, share, title, date);
+			appointmentBean.add("gui test", "noface", "1", "123456", title, date);
+			System.out.println("Termin wurde hinzugefügt.");
+		}
 
 		return "calendar";
 	}

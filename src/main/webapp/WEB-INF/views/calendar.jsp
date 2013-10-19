@@ -448,21 +448,22 @@
         	<button type="button" class="close  tooltip-toggle" aria-hidden="true"  data-toggle="tooltip" title="Schließen" data-dismiss="modal" aria-hidden="true" data-placement="left">&times;</button>
           <h4 class="modal-title">Neuen Termin erstellen</h4>
         </div>
+        <form class="form-horizontal" action="calendar" method="POST">
         <div class="modal-body">
-			<form class="form-horizontal" role="form">
 			  <div class="form-group">
 			    <label for="inputEmail1" class="col-lg-2 col-xs-2 control-label">Datum</label>
 			    <div class="col-lg-6 col-xs-6">
-			      <input type="date" class="form-control" id="inputEmail1">
+			      <input type="date" class="form-control" id="inputEmail1" name="date">
 			    </div>
 			  </div>
-			  <textarea class="form-control" rows="4" placeholder="Termin eingeben"></textarea>
-			</form>
+			  <textarea class="form-control" rows="4" placeholder="Termin eingeben" name="title"></textarea>
+			
         </div>
         <div class="modal-footer">
         	<button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-        	<button type="button" class="btn btn-success">Erstellen</button>
+        	<button type="submit" class="btn btn-success">Erstellen</button>
         </div>
+        </form>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->

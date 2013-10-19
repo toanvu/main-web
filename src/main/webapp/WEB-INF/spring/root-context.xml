@@ -4,6 +4,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
+		<bean id="appointmentBean" class="org.springframework.jndi.JndiObjectFactoryBean" scope="prototype">
+		<property name="jndiName" value="java:global/commonejb/AppointmentBean" />
+	</bean>
 
 	<!-- Definition of EJBs -->
 	<bean id="loginBean" class="org.springframework.jndi.JndiObjectFactoryBean" scope="prototype">
