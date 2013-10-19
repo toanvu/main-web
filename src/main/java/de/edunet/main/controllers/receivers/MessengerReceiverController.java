@@ -197,9 +197,9 @@ public class MessengerReceiverController  {
 			
 			//getAll groups
 			messageContainer.createTeacherGroup(messageHandler.getTeacherGroup(session));
-			messageContainer.createParentGroup(messageHandler.getParentGroup(session));
-			messageContainer.createOtherGroup(messageHandler.getOtherGroup(session));
-			messageContainer.createBasicGroup(messageHandler.getBasicGroup(session));
+//			messageContainer.createParentGroup(messageHandler.getParentGroup(session));
+//			messageContainer.createOtherGroup(messageHandler.getOtherGroup(session));
+//			messageContainer.createBasicGroup(messageHandler.getBasicGroup(session));
 			
 			
 			//transform to json
