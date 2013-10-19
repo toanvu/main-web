@@ -51,7 +51,7 @@
 					<li><a href="kontakte-hinzufuegen.html"><img src="resources/img/account-icons/user-plus.png"> Neue Kontakte</a></li>
 				    <li><a href="neue-nachrichten.html"><img src="resources/img/account-icons/mail.png"> Nachrichten</a></li>
 				    <li><a href="kontakte.html"><img src="resources/img/account-icons/address-book.png"> Adressbuch</a></li>
-				    <li class="active"><a href="kalender.html"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
+				    <li class="active"><a href="calendar"><img src="resources/img/account-icons/calendar16.png"> Kalender</a></li>
 				    <li><a href="einstellungen.html"><img src="resources/img/account-icons/wrench-screwdriver.png"> Einstellungen</a></li>
 	  			</ul>
 	  		</nav>
