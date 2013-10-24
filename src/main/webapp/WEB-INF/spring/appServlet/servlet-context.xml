@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
+    xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -28,9 +29,10 @@
 	<context:component-scan base-package="de.edunet.main" />
 	
 	<beans:bean id="homeController" 
-			class="de.edunet.main.controllers.main.HomeController">
+			class="de.edunet.main.controllers.main.HomeController" scope="request">
 		<beans:property name="messageHandler" ref="messageService" />
 		<beans:property name="contactHandler" ref="contactService" />
+		<beans:property name="user" ref="user" />
 	</beans:bean>
 
 	<beans:bean id="messageService"
@@ -59,5 +61,11 @@
 			class="de.edunet.main.controllers.setting.SettingController">
 		<beans:property name="messageHandler" ref="messageService" />
 	</beans:bean>
+	
+	<!--  security -->
+	<beans:bean id="EUserDetailsService" 
+			class="de.edunet.main.services.security.EUserDetailsService">	
+	</beans:bean>
+	
 	
 </beans:beans>

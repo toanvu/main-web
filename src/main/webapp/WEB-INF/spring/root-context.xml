@@ -35,6 +35,9 @@
 		<property name="jndiName" value="java:global/commonejb/NotificationBean" />
 	</bean>
 	<!-- End definition of EJBs -->
-
+	<bean id="user" class="de.edunet.main.models.spring.session.User" scope="session">		
+	</bean>
+	
+	
 
 </beans>
