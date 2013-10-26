@@ -67,5 +67,17 @@
 			class="de.edunet.main.services.security.EUserDetailsService">	
 	</beans:bean>
 	
+	<!-- upload file -->
+	<beans:bean id="multipartResolver"
+	  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	 
+	  <beans:bean id="jspViewResolver"
+	    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	        <beans:property name="viewClass"
+	            value="org.springframework.web.servlet.view.JstlView" />
+	        <beans:property name="prefix" value="/WEB-INF/views/" />
+	        <beans:property name="suffix" value=".jsp" />
+	  </beans:bean>
+	
 	
 </beans:beans>

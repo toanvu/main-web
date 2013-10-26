@@ -144,6 +144,21 @@
 			<scope>test</scope>
 		</dependency>        
 		
+		<!-- upload using apache common -->
+		<!-- Apache Commons Upload --> 
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+	 
+		<!-- Apache Commons Upload --> 
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		
 		<!--  edunet dependencies -->
 		<dependency> 
 		    <groupId>de.edunet24.dev</groupId> 
